@@ -4,208 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journey to the Invisible - An Aquarium Adventure</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-        }
-        .container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        h1 {
-            color: #4a5568;
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        h2 {
-            color: #2d3748;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-            margin-top: 40px;
-        }
-        h3 {
-            color: #4a5568;
-            margin-top: 30px;
-        }
-        .nav-menu {
-            background: #f7fafc;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            position: sticky;
-            top: 10px;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-menu a {
-            display: inline-block;
-            margin: 5px 10px;
-            padding: 10px 15px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .nav-menu a:hover {
-            background: #5a67d8;
-        }
-        .back-to-top {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .back-to-top a {
-            display: inline-block;
-            padding: 12px 24px;
-            background: #48bb78;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .back-to-top a:hover {
-            background: #38a169;
-        }
-        .back-to-top a::before {
-            content: "↑ ";
-            font-size: 1.2em;
-        }
-        .donation-section {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 40px 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .donation-section h3 {
-            color: #2d3748;
-            margin-top: 0;
-            font-size: 1.8em;
-        }
-        .donation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .donation-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 30px;
-            background: white;
-            color: #2d3748;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1.1em;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .donation-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        .donation-btn.paypal {
-            background: #0070ba;
-            color: white;
-        }
-        .donation-btn.coffee {
-            background: #FFDD00;
-            color: #000;
-        }
-        .donation-btn.kofi {
-            background: #13C3FF;
-            color: white;
-        }
-        .donation-icon {
-            font-size: 1.5em;
-        }
-        .illustration {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: #edf2f7;
-            border-radius: 10px;
-        }
-        .illustration img {
-            max-width: 100%;
-            border-radius: 10px;
-            border: 3px solid #667eea;
-        }
-        .illustration-placeholder {
-            background: #cbd5e0;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4a5568;
-            font-style: italic;
-            border-radius: 10px;
-            border: 3px dashed #667eea;
-        }
-        .caption {
-            font-style: italic;
-            color: #718096;
-            margin-top: 10px;
-        }
-        .danger-box {
-            background: #fff5f5;
-            border-left: 5px solid #f56565;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        .success-box {
-            background: #f0fff4;
-            border-left: 5px solid #48bb78;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        .info-box {
-            background: #ebf8ff;
-            border-left: 5px solid #4299e1;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        .character-box {
-            background: #fefcbf;
-            border: 2px solid #ecc94b;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
-        ul {
-            line-height: 1.8;
-        }
-        .project-step {
-            background: #f7fafc;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border-left: 4px solid #48bb78;
-        }
-        .illustration img {
-            max-width: 100%;
-            border-radius: 10px;
-            border: 3px solid #667eea;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <script>
         // Automatically load images when they exist, otherwise show placeholder
         document.addEventListener('DOMContentLoaded', function() {
@@ -224,20 +23,49 @@
                         placeholder.innerHTML = '';
                         placeholder.style.display = 'none';
                         const imgElement = document.createElement('img');
-                        imgElement.src = 'generated_images_pro/' + filename;
+                        imgElement.src = '../generated_images_pro/' + filename;
                         imgElement.alt = placeholder.parentElement.querySelector('.caption')?.textContent || 'Illustration';
                         placeholder.parentElement.insertBefore(imgElement, placeholder);
                     };
 
                     img.onerror = function() {
                         // Image doesn't exist, keep placeholder as is
-                        // Optionally style it differently
                         placeholder.style.opacity = '0.7';
                     };
 
-                    img.src = 'generated_images_pro/' + filename;
+                    img.src = '../generated_images_pro/' + filename;
                 }
             });
+
+            // Mobile navigation toggle
+            const navToggle = document.getElementById('nav-toggle');
+            const navLinks = document.getElementById('nav-links');
+
+            if (navToggle && navLinks) {
+                navToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+
+                    // Update button text
+                    if (navLinks.classList.contains('active')) {
+                        navToggle.setAttribute('aria-expanded', 'true');
+                    } else {
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Close navigation when a link is clicked
+                const navLinkItems = navLinks.querySelectorAll('a');
+                navLinkItems.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            navLinks.classList.remove('active');
+                            navToggle.classList.remove('active');
+                            navToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+            }
         });
     </script>
 </head>
@@ -261,16 +89,21 @@
             </p>
         </div>
 
-        <div class="nav-menu" id="top">
-            <strong>Navigate to:</strong><br>
-            <a href="#introduction">Introduction</a>
-            <a href="#chapter1">The Unhealthy Tank</a>
-            <a href="#chapter2">Meet the Helpers</a>
-            <a href="#chapter3">The Nitrogen Cycle</a>
-            <a href="#chapter4">The Healthy Tank</a>
-            <a href="#chapter5">Plants: Oxygen Factories</a>
-            <a href="#chapter6">Building Your Aquarium</a>
-        </div>
+        <nav class="nav-menu" id="top">
+            <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+                Navigation Menu
+            </button>
+            <div id="nav-links" class="nav-links">
+                <strong>Navigate to:</strong><br>
+                <a href="#introduction">Introduction</a>
+                <a href="#chapter1">The Unhealthy Tank</a>
+                <a href="#chapter2">Meet the Helpers</a>
+                <a href="#chapter3">The Nitrogen Cycle</a>
+                <a href="#chapter4">The Healthy Tank</a>
+                <a href="#chapter5">Plants: Oxygen Factories</a>
+                <a href="#chapter6">Building Your Aquarium</a>
+            </div>
+        </nav>
 
         <section id="introduction">
             <h2>Welcome to the Invisible World!</h2>
