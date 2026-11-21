@@ -9,7 +9,7 @@
 <meta property="og:type" content="book">
 <meta property="og:title" content="Pearls of Wisdom">
 <meta property="og:description" content="Daily Reflections on Old Wisdom and Modern Science, by Martin Guay, PhD.">
-<meta property="og:image" content="https://zencreation.org/img/01_christmas_living_room_h.jpg">
+<meta property="og:image" content="https://zencreation.org/img/01_christmas_couch_h.jpg">
 <meta property="og:url" content="https://zencreation.org/">
 <meta name="twitter:card" content="summary_large_image">
 <!--/OG-->
@@ -154,6 +154,17 @@ section { padding-block: 4.5rem 0; }
 .page .body { display: grid; gap: .55rem; }
 .page .body p { text-indent: 1.2em; hyphens: auto; }
 .page .body p:first-child { text-indent: 0; }
+.page sup { font-size: .68em; line-height: 0; margin-left: .08em; }
+.page sup a { color: var(--clay); text-decoration: none; padding: 0 .1em; }
+.page sup a:hover, .page sup a:focus-visible { text-decoration: underline; }
+.refs { margin-top: auto; padding-top: .7rem; border-top: 1px solid var(--rule); font-size: .76rem; line-height: 1.45; color: var(--quiet); }
+.refs .label { font-size: .64rem; margin-bottom: .3rem; }
+.refs ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
+.refs li { scroll-margin-top: 6rem; }
+.refs li:target { color: var(--ink); }
+.refs .mark { color: var(--clay); margin-right: .45em; text-decoration: none; font-variant-numeric: tabular-nums; }
+.refs span.mark { font-style: italic; }
+.refs + .folio { margin-top: 0; }
 .page .folio { margin-top: auto; padding-top: .8rem; text-align: center; font-size: .82rem; color: var(--quiet); font-variant-numeric: tabular-nums; }
 .note { display: flex; gap: .7rem; align-items: baseline; font-size: .93rem; color: var(--quiet); }
 .note::before { content: ""; flex: none; width: .55rem; height: .55rem; border-radius: 50%; background: var(--pearl); border: 1px solid var(--clay); transform: translateY(-1px); }
@@ -248,7 +259,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 
 <div class="wrap">
   <header class="top">
-    <span class="label">Zen Creations™</span>
+    <span class="label">Zen Creation™</span>
     <nav aria-label="Sections">
       <a href="#pages">Sample pages</a>
       <a href="#contents">Contents</a>
@@ -288,8 +299,8 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 </div>
 
 <figure class="bleed">
-  <img class="photo" src="img/01_christmas_living_room_h.jpg" data-v="img/01_christmas_living_room_v.jpg" width="1800" height="1013" loading="lazy" alt="Christmas morning: a woman sits cross-legged on the floor among torn wrapping paper beside the tree, reading Pearls of Wisdom.">
-  <div class="wrap"><figcaption>Christmas morning, among the wrapping paper.</figcaption></div>
+  <img class="photo" src="img/01_christmas_couch_h.jpg" data-v="img/01_christmas_couch_v.jpg" width="1800" height="1013" loading="lazy" alt="Christmas morning: someone in plaid pajamas and wool socks is curled up on the sofa, feet on the cushions, reading Pearls of Wisdom propped on their knees, the book hiding their face. Wrapping paper and the tree around them.">
+  <div class="wrap"><figcaption>Christmas morning, feet up on the sofa.</figcaption></div>
 </figure>
 
 <div class="wrap">
@@ -315,6 +326,12 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
             <p>The verse does not tell you to stop caring, or to pretend all is well. It only points out that the misery is the part that does no work.</p>
             <p>Acceptance, in this sense, is not giving up. It is putting down the one thing you were carrying that was never going to help, so that both hands are free for whatever can be done.</p>
           </div>
+          <div class="refs">
+            <p class="label">Sources</p>
+            <ol>
+              <li><span class="mark">Epigraph</span>Shantideva, Bodhicaryāvatāra 6.10, trans. L. D. Barnett, The Path of Light (John Murray, 1909)</li>
+            </ol>
+          </div>
           <p class="folio">3</p>
         </article>
         <p class="note">“Adapted from” means an old text put into today's English. The original wording is printed at the back.</p>
@@ -328,9 +345,15 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
           </div>
           <div class="body">
             <p>Are you an optimist? Most of us answer as if it were eye color: you are or you aren't.</p>
-            <p>While there are genetic predispositions, the evidence suggests something more hopeful, and more modest. When researchers pooled the studies that tried to make people more optimistic, the exercises worked, moderately. One of the best exercises was also the simplest: write for a few minutes daily about your life going as well as it realistically could—as if it already had.</p>
+            <p>While there are genetic predispositions, the evidence suggests something more hopeful, and more modest. When researchers pooled the studies that tried to make people more optimistic, the exercises worked, moderately.<sup><a href="#ref-11-1" id="cite-11-1" aria-label="Source 1">1</a></sup> One of the best exercises was also the simplest: write for a few minutes daily about your life going as well as it realistically could—as if it already had.</p>
             <p>Not a transformation, but a nudge you can give yourself, on any ordinary morning.</p>
             <p>So the question is not whether I am an optimist or not, but rather if I have practiced it lately.</p>
+          </div>
+          <div class="refs">
+            <p class="label">Sources</p>
+            <ol>
+              <li id="ref-11-1"><a class="mark" href="#cite-11-1" aria-label="Back to the text">1</a>Malouff, J. M. and Schutte, N. S. (2017), ‘Can psychological interventions increase optimism? A meta-analysis’, <i>Journal of Positive Psychology</i> 12(6), 594–604</li>
+            </ol>
           </div>
           <p class="folio">11</p>
         </article>
@@ -349,6 +372,12 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
             <p>A change of scene was supposed to lift Lucilius's gloom, and it had not. His friend, the Roman philosopher Seneca, was not surprised. You can cross the sea, he told him, and your troubles will follow, because you take yourself along.</p>
             <p>Before you change the place, try staying in it for a while. If you stay and the itch fades, it was never about the place. If it sharpens, the place may truly be wrong.</p>
             <p>A restlessness that follows you everywhere is about you, and that is good news, because you can work on it wherever you are. One that lifts the moment you leave the building is telling you something real about the building.</p>
+          </div>
+          <div class="refs">
+            <p class="label">Sources</p>
+            <ol>
+              <li><span class="mark">Epigraph</span>Seneca, Moral Letters 28.2, trans. Richard M. Gummere</li>
+            </ol>
           </div>
           <p class="folio">24</p>
         </article>
@@ -441,7 +470,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 
   <footer>
     <div class="foot">
-      <span>Pearls of Wisdom · Published by Zen Creations™</span>
+      <span>Pearls of Wisdom · Published by Zen Creation™</span>
       <span>Scene photos are generated illustrations.</span>
     </div>
   </footer>
