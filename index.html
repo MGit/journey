@@ -1,904 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journey to the Invisible - An Aquarium Adventure</title>
-    <link rel="stylesheet" href="styles.css">
-    <script>
-        // Automatically load images when they exist, otherwise show placeholder
-        document.addEventListener('DOMContentLoaded', function() {
-            const placeholders = document.querySelectorAll('.illustration-placeholder');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pearls of Wisdom · Martin Guay, PhD</title>
+<meta name="description" content="Pearls of Wisdom: Daily Reflections on Old Wisdom and Modern Science, by Martin Guay, PhD. One page a day. One old idea, tested by what we know today.">
+<!--OG-->
+<meta property="og:type" content="book">
+<meta property="og:title" content="Pearls of Wisdom">
+<meta property="og:description" content="Daily Reflections on Old Wisdom and Modern Science, by Martin Guay, PhD.">
+<meta property="og:image" content="https://zencreation.org/img/01_christmas_living_room_h.jpg">
+<meta property="og:url" content="https://zencreation.org/">
+<meta name="twitter:card" content="summary_large_image">
+<!--/OG-->
+<meta name="theme-color" content="#E9E1D1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1A16" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23E9E1D1'/%3E%3Cpath d='M3 22 C 10 24, 14 12, 21 15' fill='none' stroke='%23A0553A' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='14' r='3.4' fill='%23F7F3EA' stroke='%23A0553A' stroke-width='1.4'/%3E%3C/svg%3E">
+<script>
+  // Device detection, before the page paints: phones get the mobile layout (vertical photos, swipe rows,
+  // a floating button); everything else gets the desktop layout. Window width still adjusts the columns.
+  (function () {
+    var d = document.documentElement, ua = navigator.userAgent || '';
+    var hint = navigator.userAgentData && navigator.userAgentData.mobile;
+    var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+    var shortSide = Math.min(screen.width || 9999, screen.height || 9999);
+    var mobile = hint === true || /iPhone|iPod|Android.+Mobile|Windows Phone|IEMobile|Mobile Safari/i.test(ua) || (coarse && shortSide < 600);
+    d.setAttribute('data-device', mobile ? 'mobile' : 'desktop');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* The book's own cover (The Path) carried onto the page: oat paper, ink, one clay line that ends in a pearl.
+   Desktop: text beside the cover, three pages side by side, a photo grid with a lightbox.
+   Mobile: cover first, swipe rows for pages and photos, vertical photos, a floating button. */
+:root {
+  --paper: #E9E1D1;
+  --paper-2: #F3EEE4;
+  --ink: #3A332C;
+  --quiet: #7D7064;
+  --clay: #A0553A;
+  --on-clay: #FBF7F0;
+  --rule: #CFC4B1;
+  --pearl: #F7F3EA;
+  --shadow: 40 30 20;
+  --display: "Libre Baskerville", "Baskerville", Georgia, serif;
+  --body: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --measure: 62ch;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1E1A16; --paper-2: #29241F; --ink: #ECE4D6; --quiet: #ADA090; --clay: #D58463; --on-clay: #1E1A16;
+    --rule: #463D34; --pearl: #F2EDE3; --shadow: 0 0 0; color-scheme: dark;
+  }
+}
 
-            placeholders.forEach(placeholder => {
-                const text = placeholder.textContent.trim();
-                const match = text.match(/\[Image:\s*(.+?)\]/);
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 2px; }
 
-                if (match) {
-                    const filename = match[1].trim();
-                    const img = new Image();
+.wrap {
+  max-width: 72rem; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
 
-                    img.onload = function() {
-                        // Image exists, replace placeholder with image
-                        placeholder.innerHTML = '';
-                        placeholder.style.display = 'none';
-                        const imgElement = document.createElement('img');
-                        imgElement.src = '../generated_images_pro/' + filename;
-                        imgElement.alt = placeholder.parentElement.querySelector('.caption')?.textContent || 'Illustration';
-                        placeholder.parentElement.insertBefore(imgElement, placeholder);
-                    };
+.label { font-family: var(--display); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--quiet); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem); line-height: 1.2; }
+p { margin: 0; }
 
-                    img.onerror = function() {
-                        // Image doesn't exist, keep placeholder as is
-                        placeholder.style.opacity = '0.7';
-                    };
+/* Masthead */
+.top { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: baseline; justify-content: space-between; padding-block: max(1.25rem, env(safe-area-inset-top, 0px)) 1.25rem; }
+.top nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
+.top nav a { text-decoration: none; font-size: .95rem; color: var(--quiet); }
+.top nav a:hover { color: var(--clay); }
 
-                    img.src = '../generated_images_pro/' + filename;
-                }
-            });
+/* Hero */
+.hero { display: grid; gap: 2.5rem; align-items: center; padding-block: 1.5rem 0; }
+@media (min-width: 860px) { .hero { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 4rem; padding-block: 3rem 0; } }
+.hero-text { display: grid; gap: 1.1rem; min-width: 0; }
+.hero h1 { font-size: clamp(2.6rem, 1.6rem + 4.6vw, 4.6rem); line-height: 1.02; letter-spacing: -.01em; }
+.hero h1 em { display: block; }
+.subtitle { font-family: var(--display); font-style: italic; font-size: clamp(1.05rem, .95rem + .5vw, 1.3rem); color: var(--quiet); }
+.byline { font-family: var(--display); font-size: .85rem; letter-spacing: .18em; text-transform: uppercase; }
+.lead { font-family: var(--display); font-style: italic; font-size: 1.15rem; line-height: 1.5; margin-top: .6rem; }
+.blurb { max-width: var(--measure); }
+.close { font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem 1rem; align-items: center; margin-top: .5rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; font-family: var(--display); font-size: .95rem;
+  padding: .75rem 1.3rem; border: 1px solid var(--ink); border-radius: 999px; transition: background .2s, color .2s;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.coffee { background: var(--clay); border-color: var(--clay); color: var(--on-clay); }
+.btn.coffee:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.avail { font-size: .95rem; color: var(--quiet); }
+.cover { justify-self: center; width: min(100%, 360px); }
+.cover img {
+  width: 100%; aspect-ratio: 1650 / 2550; object-fit: cover; border-radius: 2px 4px 4px 2px;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / .2), 0 18px 40px -12px rgb(var(--shadow) / .45);
+}
+.edition { margin-top: 1rem; text-align: center; font-size: .85rem; color: var(--quiet); font-variant-numeric: tabular-nums; }
 
-            // Mobile navigation toggle
-            const navToggle = document.getElementById('nav-toggle');
-            const navLinks = document.getElementById('nav-links');
+/* The path: one line that walks in and ends at a pearl, as on the cover */
+.path { display: block; width: 100%; height: auto; margin-block: 2.5rem 0; overflow: visible; }
+.path .line { fill: none; stroke: var(--clay); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1400; stroke-dashoffset: 0; }
+.path .pearl { fill: var(--pearl); stroke: var(--clay); stroke-width: 1.2; }
+@media (prefers-reduced-motion: no-preference) {
+  .path .line { animation: walk 2.4s cubic-bezier(.45, .05, .2, 1) both; }
+}
+@keyframes walk { from { stroke-dashoffset: 1400; } }
 
-            if (navToggle && navLinks) {
-                navToggle.addEventListener('click', function() {
-                    navLinks.classList.toggle('active');
-                    navToggle.classList.toggle('active');
+/* Full-bleed photo */
+.bleed { margin: 3rem 0 0; }
+.bleed img { width: 100%; max-height: 82vh; object-fit: cover; }
+.bleed figcaption { padding-block: .75rem 0; font-size: .9rem; color: var(--quiet); font-style: italic; }
 
-                    // Update button text
-                    if (navLinks.classList.contains('active')) {
-                        navToggle.setAttribute('aria-expanded', 'true');
-                    } else {
-                        navToggle.setAttribute('aria-expanded', 'false');
-                    }
-                });
+section { padding-block: 4.5rem 0; }
+.intro { display: grid; gap: .9rem; max-width: var(--measure); margin-bottom: 2.5rem; }
+.swipe-hint { display: none; }
 
-                // Close navigation when a link is clicked
-                const navLinkItems = navLinks.querySelectorAll('a');
-                navLinkItems.forEach(link => {
-                    link.addEventListener('click', function() {
-                        if (window.innerWidth <= 768) {
-                            navLinks.classList.remove('active');
-                            navToggle.classList.remove('active');
-                            navToggle.setAttribute('aria-expanded', 'false');
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+/* Sample pages at Digest 5.5 × 8.5 */
+.pages { display: grid; gap: 2rem; }
+@media (min-width: 760px) { .pages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1080px) { .pages { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.sample { display: grid; grid-template-rows: 1fr auto; gap: .9rem; min-width: 0; }
+.page {
+  min-height: 34rem; background: var(--paper-2); color: var(--ink);
+  padding: 2.1rem 1.8rem 1.4rem; display: flex; flex-direction: column; gap: .8rem;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / .12), 0 10px 24px -14px rgb(var(--shadow) / .4);
+  font-size: .96rem; line-height: 1.55;
+}
+.page .theme { text-align: center; margin-bottom: .3rem; }
+.ep { text-align: center; display: grid; gap: .35rem; padding-inline: .4rem; margin-bottom: .6rem; }
+.ep .words { font-size: 1.02rem; line-height: 1.45; }
+.ep.own .words { font-style: italic; }
+.ep .by { font-family: var(--display); font-size: .78rem; letter-spacing: .08em; }
+.ep .by i { font-family: var(--body); letter-spacing: 0; font-size: .95rem; }
+.ep .src { font-size: .8rem; font-style: italic; color: var(--quiet); line-height: 1.35; }
+.page .body { display: grid; gap: .55rem; }
+.page .body p { text-indent: 1.2em; hyphens: auto; }
+.page .body p:first-child { text-indent: 0; }
+.page .folio { margin-top: auto; padding-top: .8rem; text-align: center; font-size: .82rem; color: var(--quiet); font-variant-numeric: tabular-nums; }
+.note { display: flex; gap: .7rem; align-items: baseline; font-size: .93rem; color: var(--quiet); }
+.note::before { content: ""; flex: none; width: .55rem; height: .55rem; border-radius: 50%; background: var(--pearl); border: 1px solid var(--clay); transform: translateY(-1px); }
+
+/* Contents */
+.contents { display: grid; gap: 3rem; }
+@media (min-width: 860px) { .contents { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 4rem; } }
+.toc { list-style: none; margin: 0; padding: 0; column-gap: 3rem; font-variant-numeric: tabular-nums; }
+@media (min-width: 640px) { .toc { columns: 2; } }
+.toc li { display: flex; align-items: baseline; gap: .5rem; break-inside: avoid; padding-block: .42rem; }
+.toc .name { min-width: 0; }
+.toc .dots { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-.3em); min-width: 1rem; }
+.toc .pp { color: var(--quiet); font-size: .9rem; white-space: nowrap; }
+.toc-foot { margin-top: 1.5rem; font-size: .93rem; color: var(--quiet); max-width: var(--measure); }
+
+/* Pull quote with photo */
+.daily { display: grid; gap: 2.5rem; align-items: center; }
+@media (min-width: 860px) { .daily { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; } }
+.daily img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.daily blockquote { margin: 0; display: grid; gap: 1.2rem; }
+.daily blockquote p { font-family: var(--display); font-size: clamp(1.15rem, 1rem + .7vw, 1.45rem); line-height: 1.55; }
+.daily blockquote p.last { font-style: italic; color: var(--clay); }
+
+/* Scenes */
+.scenes { display: grid; gap: 1.5rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1000px) { .scenes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .scenes { grid-template-columns: minmax(0, 1fr); } }
+.scene { margin: 0; display: grid; gap: .55rem; min-width: 0; }
+.scene button { all: unset; cursor: zoom-in; display: block; overflow: hidden; }
+.scene button:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
+.scene img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .6s ease; }
+.scene button:hover img { transform: scale(1.025); }
+.scene figcaption { font-size: .9rem; line-height: 1.4; }
+.scene figcaption span { display: block; color: var(--quiet); font-style: italic; }
+
+/* Lightbox (desktop) */
+dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1800px); max-height: 96vh; }
+dialog.lb::backdrop { background: rgb(20 16 12 / .88); }
+dialog.lb img { max-width: min(96vw, 1800px); max-height: 86vh; width: auto; margin: 0 auto; }
+.lb-bar { display: flex; flex-wrap: wrap; gap: .5rem 1rem; justify-content: space-between; align-items: center; padding-block: .7rem 0; color: #EDE6DA; font-size: .95rem; }
+.lb-bar .ctl { display: flex; gap: .5rem; }
+.lb-bar button { font: inherit; color: #EDE6DA; background: transparent; border: 1px solid rgb(237 230 218 / .5); border-radius: 999px; padding: .35rem .9rem; cursor: pointer; }
+.lb-bar button:hover { background: rgb(237 230 218 / .12); }
+
+/* Author */
+.author { display: grid; gap: 1.2rem; max-width: var(--measure); }
+.author p { font-size: 1.1rem; }
+
+footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1.5rem)); }
+.foot { display: flex; flex-wrap: wrap; gap: .75rem 2rem; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 1.5rem; font-size: .88rem; color: var(--quiet); }
+
+/* ---------- Mobile layout (phones, set by device detection) ---------- */
+[data-device="mobile"] body { font-size: 1.04rem; }
+[data-device="mobile"] .top { justify-content: center; }
+[data-device="mobile"] .top nav { display: none; }
+[data-device="mobile"] .hero { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; padding-block: .25rem 0; text-align: center; }
+[data-device="mobile"] .cover { order: -1; width: min(62vw, 300px); }
+[data-device="mobile"] .hero-text { justify-items: center; }
+[data-device="mobile"] .blurb { text-align: left; }
+[data-device="mobile"] .actions { justify-content: center; }
+[data-device="mobile"] .actions .btn { padding: .85rem 1.4rem; font-size: 1rem; }
+[data-device="mobile"] .path { margin-top: 2rem; }
+[data-device="mobile"] .bleed img { max-height: none; aspect-ratio: 9 / 14; }
+[data-device="mobile"] section { padding-block: 3.5rem 0; }
+[data-device="mobile"] .intro { margin-bottom: 1.5rem; }
+[data-device="mobile"] .swipe-hint { display: block; font-size: .9rem; color: var(--quiet); font-style: italic; }
+/* Swipe rows: pages and scenes scroll sideways, one item at a time */
+[data-device="mobile"] .pages,
+[data-device="mobile"] .scenes {
+  display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)); padding-bottom: .75rem;
+  scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px)); scrollbar-width: none;
+}
+[data-device="mobile"] .pages::-webkit-scrollbar,
+[data-device="mobile"] .scenes::-webkit-scrollbar { display: none; }
+[data-device="mobile"] .sample { flex: 0 0 86%; scroll-snap-align: start; }
+[data-device="mobile"] .page { min-height: 30rem; padding: 1.8rem 1.4rem 1.2rem; }
+[data-device="mobile"] .scene { flex: 0 0 74%; scroll-snap-align: start; }
+[data-device="mobile"] .scene img { aspect-ratio: 9 / 16; }
+[data-device="mobile"] .scene button { cursor: default; pointer-events: none; }
+[data-device="mobile"] .toc li { padding-block: .55rem; }
+/* The coffee button floats at the bottom of the screen on phones */
+[data-device="mobile"] .btn.coffee {
+  position: fixed; z-index: 20; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 6px 18px -6px rgb(var(--shadow) / .55);
+}
+[data-device="mobile"] footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Journey to the Invisible</h1>
-        <p style="text-align: center; font-size: 1.2em; color: #718096;">An Aquarium Adventure for Young Scientists</p>
 
-        <div class="donation-section">
-            <h3>❤️ Support This Free Educational Resource</h3>
-            <p>If this story helped you or your child learn about aquariums, consider supporting the creation of more free educational content!</p>
-            <div class="donation-buttons">
-                <!-- Buy Me a Coffee Button -->
-                <a href="https://buymeacoffee.com/zencreation" target="_blank" class="donation-btn coffee">
-                    <span class="donation-icon">☕</span>
-                    Buy Me a Coffee
-                </a>
-            </div>
-            <p style="font-size: 0.9em; margin-top: 15px; color: #4a5568;">
-                <em>100% optional - This content will always be free!</em>
-            </p>
-        </div>
-
-        <nav class="nav-menu" id="top">
-            <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
-                Navigation Menu
-            </button>
-            <div id="nav-links" class="nav-links">
-                <strong>Navigate to:</strong><br>
-                <a href="#introduction">Introduction</a>
-                <a href="#chapter1">The Unhealthy Tank</a>
-                <a href="#chapter2">Meet the Helpers</a>
-                <a href="#chapter3">The Nitrogen Cycle</a>
-                <a href="#chapter4">The Healthy Tank</a>
-                <a href="#chapter5">Plants: Oxygen Factories</a>
-                <a href="#chapter6">Building Your Aquarium</a>
-            </div>
-        </nav>
-
-        <section id="introduction">
-            <h2>Welcome to the Invisible World!</h2>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: intro_invisible_world.png]
-                </div>
-                <p class="caption">A child looking through a magical shrinking machine</p>
-            </div>
-
-            <p>Have you ever wondered what makes things work that you can't see? When you eat an apple, your body breaks it down into tiny pieces of sugar called <strong>glucose</strong>. Your muscles use this glucose, combined with oxygen you breathe, to give you energy to run and play!</p>
-
-            <p>When you watch videos on your phone, invisible waves called <strong>electromagnetic signals</strong> carry the information through the air to your screen.</p>
-
-            <p>Our world depends on things happening at scales so small we can't see them with our eyes. But what if we could shrink down and explore this invisible world?</p>
-
-            <div class="character-box">
-                <p><strong>Meet Dr. Micro and Molecule Max!</strong></p>
-                <p>Dr. Micro is a scientist who invented the Shrink-O-Matic 3000, a machine that can make you as small as a grain of sand - or even smaller! Molecule Max is her helpful robot assistant who knows everything about the tiny world.</p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: characters_dr_micro_and_max.png]
-                </div>
-                <p class="caption">Dr. Micro and Molecule Max ready for adventure</p>
-            </div>
-
-            <p>Today, you'll join them on a journey into an aquarium to discover:</p>
-            <ul>
-                <li>Why fish can't live in dirty water</li>
-                <li>What invisible helpers keep aquariums clean</li>
-                <li>How plants make oxygen for fish to breathe</li>
-                <li>How to build your own healthy aquarium at home!</li>
-            </ul>
-
-            <p>Are you ready? Step into the Shrink-O-Matic 3000...</p>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter1">
-            <h2>Chapter 1: Danger in the Unhealthy Tank!</h2>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: unhealthy_tank_overview.png]
-                </div>
-                <p class="caption">A cloudy, dirty aquarium with stressed fish</p>
-            </div>
-
-            <p><em>WHOOOOSH!</em> You feel yourself shrinking smaller and smaller. The aquarium that was on the table is now as big as a swimming pool! You're floating in the water, and something doesn't feel right...</p>
-
-            <div class="danger-box">
-                <p><strong>Dr. Micro's Warning:</strong> "This aquarium has no filter, no air pump, and no plants. Let's see what's happening at the microscopic level!"</p>
-            </div>
-
-            <h3>What's Wrong Here?</h3>
-
-            <p>The fish in this tank look unhealthy. They're gasping at the surface. The water is cloudy. What's happening?</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: fish_poop_accumulation.png]
-                </div>
-                <p class="caption">Fish waste accumulating on the tank bottom</p>
-            </div>
-
-            <p>When fish eat food, their bodies use what they need and get rid of the rest as waste (poop and pee). Fish pee contains a chemical called <strong>ammonia</strong>. In a healthy human, our kidneys clean this out, but fish release it directly into the water.</p>
-
-            <div class="info-box">
-                <p><strong>What is Ammonia?</strong><br>
-                Ammonia (NH₃) is a molecule made of one nitrogen atom (N) and three hydrogen atoms (H). It's created when proteins break down. Even in tiny amounts, ammonia is toxic to fish!</p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: ammonia_molecules.png]
-                </div>
-                <p class="caption">Ammonia molecules floating in the water, looking dangerous</p>
-            </div>
-
-            <p>"Look around!" says Molecule Max. "Can you see those spiky-looking molecules? That's ammonia! It's building up in the water because there's nothing to break it down."</p>
-
-            <p>The ammonia burns the fish's gills (the organs they use to breathe underwater). It's like trying to breathe in a room full of strong chemical fumes!</p>
-
-            <div class="danger-box">
-                <p><strong>The Problems in This Tank:</strong></p>
-                <ul>
-                    <li>Ammonia levels are rising and poisoning the fish</li>
-                    <li>No oxygen is being added (no air pump)</li>
-                    <li>No beneficial bacteria to break down waste</li>
-                    <li>No plants to absorb nutrients and create oxygen</li>
-                </ul>
-            </div>
-
-            <p>"Quick!" shouts Dr. Micro. "Let's jump to a healthy aquarium to see how it should work!"</p>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter2">
-            <h2>Chapter 2: Meet the Invisible Helpers</h2>
-
-            <p><em>POOF!</em> You teleport to a different aquarium. The water is crystal clear. The fish are swimming happily. What's different?</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: healthy_tank_overview.png]
-                </div>
-                <p class="caption">A beautiful, clear aquarium with happy fish and plants</p>
-            </div>
-
-            <p>"Let me introduce you to the real heroes of a healthy aquarium," says Dr. Micro, "the <strong>beneficial bacteria</strong>!"</p>
-
-            <h3>The Bacteria Cleanup Crew</h3>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: bacteria_colonies.png]
-                </div>
-                <p class="caption">Colonies of beneficial bacteria on surfaces</p>
-            </div>
-
-            <p>Bacteria are tiny, tiny living creatures - so small that millions could fit on the head of a pin! Most bacteria are helpful, not harmful. In an aquarium, special bacteria work as a cleanup crew.</p>
-
-            <div class="info-box">
-                <p><strong>Where Do Bacteria Live?</strong><br>
-                Beneficial bacteria live on every surface in the aquarium: on rocks, in the gravel, on decorations, and especially in the filter sponge. They form colonies - like tiny invisible cities!</p>
-            </div>
-
-            <p>"Watch this!" says Molecule Max, pointing to a spiky ammonia molecule floating by. Suddenly, a cluster of round-shaped bacteria surround it.</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: nitrosomonas_eating_ammonia.png]
-                </div>
-                <p class="caption">Nitrosomonas bacteria converting ammonia to nitrite</p>
-            </div>
-
-            <p>These bacteria are called <strong>Nitrosomonas</strong> (say: nye-troh-SOH-moh-nas). They "eat" the ammonia and transform it into something else called <strong>nitrite</strong>.</p>
-
-            <div class="info-box">
-                <p><strong>Chemical Transformation:</strong><br>
-                Ammonia (NH₃) → Nitrite (NO₂⁻)<br>
-                The bacteria add oxygen to the nitrogen! But wait... nitrite is still toxic to fish. What happens next?</p>
-            </div>
-
-            <p>"Look! Here come the second team!" exclaims Dr. Micro.</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: nitrobacter_eating_nitrite.png]
-                </div>
-                <p class="caption">Nitrobacter bacteria converting nitrite to nitrate</p>
-            </div>
-
-            <p>Different bacteria called <strong>Nitrobacter</strong> (say: nye-troh-BACK-ter) appear. They eat the nitrite and transform it into <strong>nitrate</strong>.</p>
-
-            <div class="info-box">
-                <p><strong>Chemical Transformation:</strong><br>
-                Nitrite (NO₂⁻) → Nitrate (NO₃⁻)<br>
-                Nitrate has even more oxygen! At low levels, nitrate is much safer for fish.</p>
-            </div>
-
-            <p>"This two-step process is called the <strong>Nitrogen Cycle</strong>," explains Dr. Micro. "It's the most important thing to understand about aquariums!"</p>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter3">
-            <h2>Chapter 3: The Nitrogen Cycle Adventure</h2>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: nitrogen_cycle_diagram.png]
-                </div>
-                <p class="caption">Complete diagram of the nitrogen cycle in an aquarium</p>
-            </div>
-
-            <p>Let's follow the complete journey of nitrogen through the aquarium ecosystem:</p>
-
-            <h3>Step 1: Fish Waste</h3>
-            <p>Fish eat food (proteins). Their bodies break down the proteins and release ammonia (NH₃) through their gills and waste. Uneaten food also rots and creates ammonia.</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: step1_fish_waste.png]
-                </div>
-                <p class="caption">Fish releasing ammonia into the water</p>
-            </div>
-
-            <h3>Step 2: Nitrosomonas Bacteria</h3>
-            <p>Nitrosomonas bacteria (living in the filter and on surfaces) consume ammonia and convert it to nitrite (NO₂⁻).</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: step2_nitrosomonas.png]
-                </div>
-                <p class="caption">Nitrosomonas bacteria at work</p>
-            </div>
-
-            <div class="info-box">
-                <p><strong>Why Bacteria Need Oxygen:</strong><br>
-                These bacteria need oxygen to do their job! That's why aquariums need air pumps or filters that agitate the water surface. The oxygen dissolves into the water, and the bacteria use it to transform the chemicals.</p>
-            </div>
-
-            <h3>Step 3: Nitrobacter Bacteria</h3>
-            <p>Nitrobacter bacteria (also living in the filter and on surfaces) consume nitrite and convert it to nitrate (NO₃⁻).</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: step3_nitrobacter.png]
-                </div>
-                <p class="caption">Nitrobacter bacteria completing the cycle</p>
-            </div>
-
-            <h3>Step 4: Plant Absorption</h3>
-            <p>Plants absorb nitrate through their roots and leaves! They use the nitrogen to build proteins and grow. This removes nitrate from the water.</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: step4_plant_absorption.png]
-                </div>
-                <p class="caption">Plants absorbing nitrate as food</p>
-            </div>
-
-            <h3>Step 5: Water Changes</h3>
-            <p>Regular water changes remove excess nitrate that the plants can't absorb. Even though nitrate is safer than ammonia or nitrite, too much can still harm fish.</p>
-
-            <div class="success-box">
-                <p><strong>The Complete Cycle:</strong><br>
-                Fish Waste → Ammonia (toxic) → Nitrite (toxic) → Nitrate (less toxic) → Plants & Water Changes</p>
-                <p>This cycle is always running in a healthy aquarium!</p>
-            </div>
-
-            <h3>Why the Filter Sponge is Important</h3>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: sponge_filter_closeup.png]
-                </div>
-                <p class="caption">Inside a sponge filter: a bacteria paradise</p>
-            </div>
-
-            <p>"Let's zoom into the sponge filter!" says Molecule Max. You shrink even smaller and fly into the tiny pores of the sponge.</p>
-
-            <p>It's like flying through a vast cave system! On every surface, you see colonies of bacteria - billions and billions of them!</p>
-
-            <div class="info-box">
-                <p><strong>Why Sponge Filters Work:</strong></p>
-                <ul>
-                    <li>Huge surface area for bacteria to grow on</li>
-                    <li>Water flows through, bringing ammonia and oxygen to the bacteria</li>
-                    <li>The sponge also traps solid waste particles</li>
-                    <li>Gentle water flow doesn't harm fish</li>
-                </ul>
-            </div>
-
-            <p>"Never clean your filter sponge with tap water!" warns Dr. Micro. "Tap water contains chlorine that kills bacteria. Always rinse it gently in old aquarium water you've removed during a water change."</p>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter4">
-            <h2>Chapter 4: Exploring the Healthy Tank</h2>
-
-            <p>Now that you understand the nitrogen cycle, let's explore more of what makes this aquarium healthy.</p>
-
-            <h3>The Oxygen Story</h3>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: oxygen_molecules_in_water.png]
-                </div>
-                <p class="caption">Oxygen molecules dissolved in water</p>
-            </div>
-
-            <p>"Look at those tiny molecules with two atoms connected together," points Molecule Max. "That's oxygen (O₂)!"</p>
-
-            <p>Fish don't breathe air like we do, but they still need oxygen! They extract oxygen that's dissolved in the water using their gills.</p>
-
-            <div class="info-box">
-                <p><strong>How Oxygen Gets Into Water:</strong></p>
-                <ul>
-                    <li><strong>Surface agitation:</strong> When water moves at the surface (from filters or air pumps), oxygen from the air dissolves into the water</li>
-                    <li><strong>Photosynthesis:</strong> Plants create oxygen during the day</li>
-                </ul>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: air_pump_bubbles.png]
-                </div>
-                <p class="caption">Air pump creating bubbles and surface movement</p>
-            </div>
-
-            <p>You watch as bubbles from the air pump rise to the surface. "The bubbles themselves don't add much oxygen," explains Dr. Micro. "It's the water movement they create! When the surface ripples and moves, oxygen from the air dissolves into the water."</p>
-
-            <h3>Temperature Matters!</h3>
-
-            <div class="info-box">
-                <p><strong>Important Fact:</strong> Warm water holds less dissolved oxygen than cold water. That's why tropical fish (from warm rivers) need good aeration, and why cold-water fish (like goldfish) can survive in ponds with less aeration.</p>
-            </div>
-
-            <h3>pH: The Acidity Scale</h3>
-
-            <p>Dr. Micro pulls out a strange device that glows different colors. "This measures pH - how acidic or basic the water is."</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: ph_scale_visualization.png]
-                </div>
-                <p class="caption">The pH scale from acidic to basic</p>
-            </div>
-
-            <div class="info-box">
-                <p><strong>What is pH?</strong><br>
-                pH measures the concentration of hydrogen ions (H⁺) in water:</p>
-                <ul>
-                    <li><strong>pH 7:</strong> Neutral (pure water)</li>
-                    <li><strong>pH below 7:</strong> Acidic (like lemon juice - pH 2)</li>
-                    <li><strong>pH above 7:</strong> Basic/Alkaline (like soap - pH 9)</li>
-                </ul>
-                <p>Most freshwater fish are happy between pH 6.5 and 7.5</p>
-            </div>
-
-            <p>"When ammonia and nitrite build up, they can change the pH," explains Molecule Max. "That's another reason the nitrogen cycle is so important!"</p>
-
-            <h3>The Water Change Mystery</h3>
-
-            <p>You watch as a giant tube (from a human perspective) descends into the aquarium. It's time for a water change!</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: water_change_process.png]
-                </div>
-                <p class="caption">Water being removed and replaced during a water change</p>
-            </div>
-
-            <p>"Why do we need water changes if the bacteria clean everything?" you ask.</p>
-
-            <p>"Great question!" says Dr. Micro. "The bacteria convert ammonia to nitrate, but nitrate still accumulates. Plants help, but in most aquariums, nitrate builds up over time. We remove 20-30% of the water weekly and replace it with fresh, dechlorinated water to keep nitrate levels safe."</p>
-
-            <div class="info-box">
-                <p><strong>Why Dechlorinate?</strong><br>
-                Tap water contains chlorine or chloramine (chemicals that kill bacteria in drinking water). Before adding tap water to your aquarium, you must add a water conditioner that removes these chemicals. Otherwise, you'll kill your beneficial bacteria!</p>
-            </div>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter5">
-            <h2>Chapter 5: Plants - The Oxygen Factories</h2>
-
-            <p>"Now for my favorite part," beams Dr. Micro. "Let's visit an aquarium plant!"</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: aquarium_plant_overview.png]
-                </div>
-                <p class="caption">A healthy aquatic plant with leaves reaching toward light</p>
-            </div>
-
-            <p>You fly toward a beautiful green plant swaying in the current. As you get closer, you see tiny openings on the leaves - like little mouths!</p>
-
-            <h3>Stomata: The Plant's Breathing Pores</h3>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: stomata_closeup.png]
-                </div>
-                <p class="caption">Stomata on a leaf surface, with guard cells</p>
-            </div>
-
-            <p>"These are called <strong>stomata</strong> (say: STOH-mah-tah)," explains Molecule Max. "Plants use them to take in carbon dioxide (CO₂) and release oxygen (O₂)!"</p>
-
-            <div class="info-box">
-                <p><strong>Photosynthesis - The Amazing Process:</strong><br>
-                Plants use light energy to transform carbon dioxide and water into glucose (sugar) and oxygen!</p>
-                <p>6 CO₂ + 6 H₂O + Light Energy → C₆H₁₂O₆ (glucose) + 6 O₂</p>
-            </div>
-
-            <h3>Inside the Leaf</h3>
-
-            <p>You shrink even smaller and enter through a stoma. Inside the leaf, you see green structures floating everywhere!</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: chloroplasts_inside_cell.png]
-                </div>
-                <p class="caption">Chloroplasts inside a plant cell</p>
-            </div>
-
-            <p>"These green blobs are <strong>chloroplasts</strong>," says Dr. Micro. "They contain chlorophyll - the green pigment that captures light energy. This is where the magic happens!"</p>
-
-            <p>You watch as:</p>
-            <ol>
-                <li>Light energy enters the chloroplast</li>
-                <li>Water molecules (H₂O) are split apart</li>
-                <li>Carbon dioxide (CO₂) from the water is captured</li>
-                <li>The plant builds glucose molecules for energy and growth</li>
-                <li>Oxygen (O₂) is released as a byproduct</li>
-            </ol>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: photosynthesis_process.png]
-                </div>
-                <p class="caption">The photosynthesis process happening inside a chloroplast</p>
-            </div>
-
-            <h3>The Day and Night Cycle</h3>
-
-            <div class="info-box">
-                <p><strong>Important Discovery:</strong></p>
-                <ul>
-                    <li><strong>During the day (with light):</strong> Plants do photosynthesis - they consume CO₂ and produce O₂</li>
-                    <li><strong>At night (without light):</strong> Plants do cellular respiration - they consume O₂ and produce CO₂ (just like animals!)</li>
-                </ul>
-                <p>However, plants produce more oxygen during the day than they consume at night, so they're a net benefit to the aquarium!</p>
-            </div>
-
-            <h3>Plants and the Nitrogen Cycle</h3>
-
-            <p>You fly down to the plant's roots, which are buried in the gravel.</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: plant_roots_absorbing_nitrate.png]
-                </div>
-                <p class="caption">Plant roots absorbing nitrate and other nutrients</p>
-            </div>
-
-            <p>"Watch the roots!" says Molecule Max. You see nitrate molecules (NO₃⁻) being pulled into the root system.</p>
-
-            <p>"Plants need nitrogen to build proteins and grow," explains Dr. Micro. "They absorb nitrate from the water and use it as fertilizer! Some plants also absorb nitrate through their leaves."</p>
-
-            <div class="success-box">
-                <p><strong>Benefits of Aquarium Plants:</strong></p>
-                <ul>
-                    <li>Produce oxygen for fish to breathe</li>
-                    <li>Absorb nitrate (natural filtration)</li>
-                    <li>Absorb carbon dioxide</li>
-                    <li>Provide hiding places for fish</li>
-                    <li>Make the aquarium beautiful!</li>
-                    <li>Help stabilize pH</li>
-                    <li>Compete with algae for nutrients</li>
-                </ul>
-            </div>
-
-            <h3>Why Plants Need Light</h3>
-
-            <p>"Without adequate light, plants can't do photosynthesis," warns Dr. Micro. "That's why aquariums need proper lighting - usually 8-10 hours per day."</p>
-
-            <div class="info-box">
-                <p><strong>Light Spectrum:</strong> Plants use mainly red and blue light for photosynthesis. Special aquarium lights are designed to provide the right spectrum!</p>
-            </div>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <section id="chapter6">
-            <h2>Chapter 6: Building Your Own Aquarium!</h2>
-
-            <p>"Now you understand the invisible world that makes aquariums work!" says Dr. Micro. "Let's build one together!"</p>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: aquarium_build_materials.png]
-                </div>
-                <p class="caption">All the materials needed to build a healthy aquarium</p>
-            </div>
-
-            <h3>What You'll Need</h3>
-
-            <div class="info-box">
-                <p><strong>Essential Equipment:</strong></p>
-                <ul>
-                    <li><strong>Tank:</strong> 10-20 gallon tank for beginners (larger is actually easier!)</li>
-                    <li><strong>Filter:</strong> Sponge filter or hang-on-back filter</li>
-                    <li><strong>Air pump:</strong> To power sponge filter and add oxygen</li>
-                    <li><strong>Heater:</strong> For tropical fish (set to 76-78°F / 24-26°C)</li>
-                    <li><strong>Thermometer:</strong> To monitor temperature</li>
-                    <li><strong>Light:</strong> LED aquarium light</li>
-                    <li><strong>Substrate:</strong> Gravel or sand (2-3 inches deep)</li>
-                    <li><strong>Decorations:</strong> Rocks, driftwood (avoid painted items)</li>
-                    <li><strong>Plants:</strong> Easy beginner plants like Java Fern, Anubias, Amazon Sword</li>
-                </ul>
-            </div>
-
-            <div class="info-box">
-                <p><strong>Essential Supplies:</strong></p>
-                <ul>
-                    <li><strong>Water conditioner:</strong> Removes chlorine/chloramine</li>
-                    <li><strong>Beneficial bacteria starter:</strong> Speeds up cycling</li>
-                    <li><strong>Test kit:</strong> Tests for ammonia, nitrite, nitrate, and pH</li>
-                    <li><strong>Fish net:</strong> For catching fish safely</li>
-                    <li><strong>Siphon/gravel vacuum:</strong> For water changes</li>
-                    <li><strong>Bucket:</strong> Dedicated to aquarium use only</li>
-                </ul>
-            </div>
-
-            <h3>Step-by-Step Build Guide</h3>
-
-            <div class="project-step">
-                <h4>Step 1: Plan Your Location</h4>
-                <p>Choose a spot that is:</p>
-                <ul>
-                    <li>Away from direct sunlight (prevents algae growth)</li>
-                    <li>Away from heating/AC vents</li>
-                    <li>On a sturdy stand (water is heavy: 1 gallon = 8.3 pounds!)</li>
-                    <li>Near an electrical outlet</li>
-                </ul>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: aquarium_location_setup.png]
-                </div>
-                <p class="caption">Proper aquarium placement in a room</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 2: Clean Everything</h4>
-                <p>Rinse the tank, gravel, and decorations with clean water. <strong>Never use soap!</strong> Soap residue is toxic to fish.</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 3: Add Substrate</h4>
-                <p>Place 2-3 inches of rinsed gravel or sand in the bottom of the tank. Slope it slightly higher in the back for better visual depth.</p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: adding_substrate.png]
-                </div>
-                <p class="caption">Adding and arranging substrate in the tank</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 4: Add Decorations and Plants</h4>
-                <p>Arrange rocks and driftwood. Plant rooted plants in the substrate. Attach Java Fern and Anubias to rocks or wood (don't bury their rhizomes!).</p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: planting_and_decorating.png]
-                </div>
-                <p class="caption">Adding plants and decorations</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 5: Fill with Water</h4>
-                <p>Place a plate or bowl on the substrate and pour water onto it slowly. This prevents disturbing your arrangement. Fill to about 1 inch from the top.</p>
-                <p><strong>Important:</strong> Add water conditioner according to package directions to remove chlorine!</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 6: Install Equipment</h4>
-                <ul>
-                    <li>Install the heater (usually placed near the filter for good circulation)</li>
-                    <li>Set up the sponge filter and connect to air pump</li>
-                    <li>Install the aquarium light on top</li>
-                    <li>Attach the thermometer to the glass</li>
-                </ul>
-                <p><strong>Don't plug anything in yet!</strong></p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: equipment_installation.png]
-                </div>
-                <p class="caption">Installing filter, heater, and other equipment</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 7: Turn Everything On</h4>
-                <p>Now plug in the heater, air pump, and light. Make sure everything is working. The heater light should turn on, and bubbles should come from the sponge filter.</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Step 8: Add Beneficial Bacteria Starter</h4>
-                <p>Add a commercial beneficial bacteria product according to package directions. This helps jumpstart the nitrogen cycle.</p>
-            </div>
-
-            <h3>The Fishless Cycling Process</h3>
-
-            <div class="danger-box">
-                <p><strong>STOP! Don't Add Fish Yet!</strong></p>
-                <p>This is the most important part beginners often skip. Your aquarium needs to develop beneficial bacteria colonies before it can support fish. This process takes 4-6 weeks!</p>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: cycling_process_timeline.png]
-                </div>
-                <p class="caption">The timeline of the cycling process</p>
-            </div>
-
-            <h4>Method 1: Fish Food Cycling</h4>
-            <div class="project-step">
-                <p>Add a small pinch of fish food to the tank every other day. As it decomposes, it creates ammonia. This feeds the bacteria colonies as they grow.</p>
-
-                <p><strong>Testing Schedule:</strong></p>
-                <ul>
-                    <li><strong>Week 1-2:</strong> Ammonia rises, then begins to drop. Test every 2-3 days.</li>
-                    <li><strong>Week 2-4:</strong> Nitrite appears and rises, then begins to drop. Test every 2-3 days.</li>
-                    <li><strong>Week 4-6:</strong> Nitrate appears. When ammonia and nitrite both read 0 ppm for several days, you're cycled!</li>
-                </ul>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: test_kit_usage.png]
-                </div>
-                <p class="caption">Using a water test kit to check parameters</p>
-            </div>
-
-            <h4>Method 2: Pure Ammonia Cycling (Faster)</h4>
-            <div class="project-step">
-                <p>Add pure ammonia (from hardware store, must be unscented) to reach 2-4 ppm ammonia. This is faster and more controlled than the fish food method.</p>
-            </div>
-
-            <div class="success-box">
-                <p><strong>Your Tank is Cycled When:</strong></p>
-                <ul>
-                    <li>You can add ammonia to 2 ppm</li>
-                    <li>Within 24 hours, both ammonia and nitrite read 0 ppm</li>
-                    <li>Nitrate is present (shows bacteria are working)</li>
-                </ul>
-                <p>Now you're ready for fish!</p>
-            </div>
-
-            <h3>Adding Fish</h3>
-
-            <div class="project-step">
-                <h4>Start Small!</h4>
-                <p>Only add 2-3 small fish at first. Wait 1-2 weeks before adding more. This gives your bacteria time to adjust to the increased ammonia production.</p>
-
-                <p><strong>Beginner-Friendly Fish:</strong></p>
-                <ul>
-                    <li><strong>Guppies:</strong> Colorful, hardy, active (78°F)</li>
-                    <li><strong>Platies:</strong> Peaceful, many colors (75°F)</li>
-                    <li><strong>Corydoras Catfish:</strong> Bottom dwellers, very peaceful (75°F)</li>
-                    <li><strong>Neon Tetras:</strong> Beautiful schooling fish - need groups of 6+ (75°F)</li>
-                </ul>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: beginner_fish_species.png]
-                </div>
-                <p class="caption">Popular beginner fish species</p>
-            </div>
-
-            <div class="project-step">
-                <h4>Acclimating New Fish</h4>
-                <ol>
-                    <li>Float the sealed bag in your tank for 15-20 minutes to equalize temperature</li>
-                    <li>Open the bag and add 1/4 cup of tank water to it</li>
-                    <li>Wait 15 minutes</li>
-                    <li>Add another 1/4 cup of tank water</li>
-                    <li>Wait 15 minutes</li>
-                    <li>Gently net the fish and place in tank (don't add the bag water!)</li>
-                </ol>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: fish_acclimation_process.png]
-                </div>
-                <p class="caption">Properly acclimating new fish</p>
-            </div>
-
-            <h3>Maintenance Schedule</h3>
-
-            <div class="info-box">
-                <p><strong>Daily:</strong></p>
-                <ul>
-                    <li>Feed fish once or twice (only what they can eat in 2-3 minutes)</li>
-                    <li>Check temperature</li>
-                    <li>Observe fish behavior</li>
-                </ul>
-
-                <p><strong>Weekly:</strong></p>
-                <ul>
-                    <li>20-30% water change</li>
-                    <li>Vacuum gravel during water change</li>
-                    <li>Test water (ammonia, nitrite, nitrate, pH)</li>
-                    <li>Clean algae from glass if needed</li>
-                </ul>
-
-                <p><strong>Monthly:</strong></p>
-                <ul>
-                    <li>Rinse filter sponge in old tank water (never tap water!)</li>
-                    <li>Trim plants if overgrown</li>
-                    <li>Check all equipment is working properly</li>
-                </ul>
-            </div>
-
-            <div class="illustration">
-                <div class="illustration-placeholder">
-                    [Image: maintenance_activities.png]
-                </div>
-                <p class="caption">Regular aquarium maintenance tasks</p>
-            </div>
-
-            <h3>Troubleshooting Common Problems</h3>
-
-            <div class="danger-box">
-                <p><strong>Problem: Cloudy Water</strong></p>
-                <p><strong>Causes:</strong></p>
-                <ul>
-                    <li>Bacterial bloom (new tank) - wait it out, it will clear</li>
-                    <li>Overfeeding - reduce food</li>
-                    <li>Dirty filter - clean sponge in old tank water</li>
-                </ul>
-            </div>
-
-            <div class="danger-box">
-                <p><strong>Problem: Green Water</strong></p>
-                <p><strong>Cause:</strong> Algae bloom from too much light or nutrients</p>
-                <p><strong>Solution:</strong></p>
-                <ul>
-                    <li>Reduce light duration to 6-8 hours</li>
-                    <li>Move tank away from window</li>
-                    <li>Do water changes to remove excess nitrate</li>
-                    <li>Add more plants (they compete with algae)</li>
-                </ul>
-            </div>
-
-            <div class="danger-box">
-                <p><strong>Problem: Fish Gasping at Surface</strong></p>
-                <p><strong>Cause:</strong> Low oxygen</p>
-                <p><strong>Solution:</strong></p>
-                <ul>
-                    <li>Increase surface agitation (turn up air pump)</li>
-                    <li>Do a partial water change</li>
-                    <li>Check temperature (lower temperature = more oxygen)</li>
-                    <li>Test for ammonia/nitrite</li>
-                </ul>
-            </div>
-
-            <div class="success-box">
-                <h3>Congratulations!</h3>
-                <p>You now understand the invisible world that makes aquariums work, and you have the knowledge to build and maintain your own thriving aquatic ecosystem!</p>
-
-                <p><strong>Remember the key concepts:</strong></p>
-                <ul>
-                    <li>The nitrogen cycle is essential - beneficial bacteria convert toxic ammonia to less toxic nitrate</li>
-                    <li>Plants produce oxygen and absorb nitrate</li>
-                    <li>Regular maintenance keeps the system balanced</li>
-                    <li>Patience during cycling prevents fish deaths</li>
-                    <li>Test your water regularly</li>
-                </ul>
-            </div>
-
-            <div class="back-to-top">
-                <a href="#top">Back to Navigation</a>
-            </div>
-        </section>
-
-        <div style="text-align: center; margin-top: 50px; padding: 30px; background: #f7fafc; border-radius: 10px;">
-            <h2>Your Journey Continues!</h2>
-            <p>The invisible world is all around us, working every second of every day. You've learned how bacteria, molecules, and plants work together in an aquarium ecosystem.</p>
-            <p><strong>What other invisible worlds would you like to explore?</strong></p>
-            <p>Keep observing, keep questioning, and keep discovering!</p>
-            <p style="margin-top: 20px; font-style: italic;">- Dr. Micro and Molecule Max</p>
-        </div>
-
-        <div class="illustration">
-            <div class="illustration-placeholder">
-                [Image: final_celebration.png]
-            </div>
-            <p class="caption">Dr. Micro, Molecule Max, and you celebrating your new knowledge!</p>
-        </div>
-
-        <div style="text-align: center; margin-top: 30px; font-size: 0.9em; color: #718096;">
-            <p>Journey to the Invisible - Educational Content</p>
-            <p>Always supervise children when setting up and maintaining aquariums</p>
-        </div>
+<div class="wrap">
+  <header class="top">
+    <span class="label">Zen Creations™</span>
+    <nav aria-label="Sections">
+      <a href="#pages">Sample pages</a>
+      <a href="#contents">Contents</a>
+      <a href="#scenes">Scenes</a>
+      <a href="#author">Author</a>
+    </nav>
+  </header>
+
+  <main>
+  <div class="hero">
+    <div class="hero-text">
+      <span class="label">A book of daily reflections · 110 pages</span>
+      <h1>Pearls <em>of Wisdom</em></h1>
+      <p class="subtitle">Daily Reflections on Old Wisdom and Modern Science</p>
+      <p class="byline">Martin Guay, PhD</p>
+      <p class="lead">One page a day.<br>One old idea, tested by what we know today.</p>
+      <p class="blurb"><i>Pearls of Wisdom</i> gathers the advice that has carried people through hard times for thousands of years, from Seneca and Marcus Aurelius to the Bible, the French moralists and the psychologists still running their studies. Each page holds one idea, one story, and one small way to try it in your own life.</p>
+      <p class="close">Read a page in the morning. Walk it during the day.</p>
+      <!--CTA-->
+      <div class="actions">
+        <a class="btn" href="#pages">Read three pages</a>
+        <a class="btn coffee" href="https://buymeacoffee.com/zencreation" target="_blank" rel="noopener"><span aria-hidden="true">☕</span> Buy Me a Coffee</a>
+      </div>
+      <!--/CTA-->
     </div>
+    <div class="cover">
+      <img src="img/cover.jpg" width="900" height="1391" alt="The front cover of Pearls of Wisdom: oat-colored paper, the title in a classic serif, and a thin red line that ends at a small pearl. Byline: Martin Guay, PhD.">
+      <p class="edition">Paperback · 5.5 × 8.5 in · 155 pages</p>
+    </div>
+  </div>
+
+  <svg class="path" viewBox="0 0 1200 80" aria-hidden="true" focusable="false">
+    <path class="line" d="M-10 58 C 160 62, 260 22, 430 34 S 700 70, 860 52 S 1060 30, 1141 45" />
+    <circle class="pearl" cx="1150" cy="46" r="7.5" />
+  </svg>
+  </main>
+</div>
+
+<figure class="bleed">
+  <img class="photo" src="img/01_christmas_living_room_h.jpg" data-v="img/01_christmas_living_room_v.jpg" width="1800" height="1013" loading="lazy" alt="Christmas morning: a woman sits cross-legged on the floor among torn wrapping paper beside the tree, reading Pearls of Wisdom.">
+  <div class="wrap"><figcaption>Christmas morning, among the wrapping paper.</figcaption></div>
+</figure>
+
+<div class="wrap">
+  <section id="pages" aria-labelledby="pages-h">
+    <div class="intro">
+      <span class="label">Inside the book</span>
+      <h2 id="pages-h">Each page holds a thought, and stands on its own.</h2>
+      <p>A page opens with a line of wisdom, at times an old saying, at times a modern one. Then follows a reflection that can carry you through the day. Read in order, or open the book anywhere. It's nice to scan before picking.</p>
+      <p class="swipe-hint">Swipe for the next page →</p>
+    </div>
+
+    <div class="pages">
+      <div class="sample">
+        <article class="page" aria-label="Page 3, Presence and Simple Joys">
+          <p class="label theme">Presence and Simple Joys</p>
+          <div class="ep">
+            <p class="words">If there is a remedy, then what good is being unhappy? Just do it. And if there is none, then why bother?</p>
+            <p class="by"><i>adapted from</i> SHANTIDEVA</p>
+            <p class="src">Bodhicaryāvatāra 6.10, tr. L. D. Barnett, The Path of Light (1909)</p>
+          </div>
+          <div class="body">
+            <p>Shantideva, an Indian Buddhist monk of the eighth century, packs a whole philosophy into two questions. If something can be done about your trouble, why be miserable? Do it. If nothing can be done, why be miserable? It changes nothing.</p>
+            <p>The verse does not tell you to stop caring, or to pretend all is well. It only points out that the misery is the part that does no work.</p>
+            <p>Acceptance, in this sense, is not giving up. It is putting down the one thing you were carrying that was never going to help, so that both hands are free for whatever can be done.</p>
+          </div>
+          <p class="folio">3</p>
+        </article>
+        <p class="note">“Adapted from” means an old text put into today's English. The original wording is printed at the back.</p>
+      </div>
+
+      <div class="sample">
+        <article class="page" aria-label="Page 11, Optimism">
+          <p class="label theme">Optimism</p>
+          <div class="ep own">
+            <p class="words">Optimism is learned the way handwriting is: slowly, and by practicing it.</p>
+          </div>
+          <div class="body">
+            <p>Are you an optimist? Most of us answer as if it were eye color: you are or you aren't.</p>
+            <p>While there are genetic predispositions, the evidence suggests something more hopeful, and more modest. When researchers pooled the studies that tried to make people more optimistic, the exercises worked, moderately. One of the best exercises was also the simplest: write for a few minutes daily about your life going as well as it realistically could—as if it already had.</p>
+            <p>Not a transformation, but a nudge you can give yourself, on any ordinary morning.</p>
+            <p>So the question is not whether I am an optimist or not, but rather if I have practiced it lately.</p>
+          </div>
+          <p class="folio">11</p>
+        </article>
+        <p class="note">A line in italics with no name is the author's own.</p>
+      </div>
+
+      <div class="sample">
+        <article class="page" aria-label="Page 24, Stuck: Between Hunger and Thirst">
+          <p class="label theme">Stuck: Between Hunger and Thirst</p>
+          <div class="ep">
+            <p class="words">“Do you ask why such flight does not help you? It is because you flee along with yourself.”</p>
+            <p class="by">SENECA</p>
+            <p class="src">Moral Letters 28.2, trans. R. M. Gummere</p>
+          </div>
+          <div class="body">
+            <p>A change of scene was supposed to lift Lucilius's gloom, and it had not. His friend, the Roman philosopher Seneca, was not surprised. You can cross the sea, he told him, and your troubles will follow, because you take yourself along.</p>
+            <p>Before you change the place, try staying in it for a while. If you stay and the itch fades, it was never about the place. If it sharpens, the place may truly be wrong.</p>
+            <p>A restlessness that follows you everywhere is about you, and that is good news, because you can work on it wherever you are. One that lifts the moment you leave the building is telling you something real about the building.</p>
+          </div>
+          <p class="folio">24</p>
+        </article>
+        <p class="note">Words in quotation marks are the original, or an old translation, exactly as printed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contents" aria-labelledby="contents-h">
+    <div class="contents">
+      <div class="intro">
+        <span class="label">Contents</span>
+        <h2 id="contents-h">Fourteen themes, from presence to character habits.</h2>
+        <p>The pages are grouped by theme. Some will speak to you right away, and others will wait for the day you need them.</p>
+      </div>
+      <div>
+        <ol class="toc">
+          <li><span class="name">Presence and Simple Joys</span><span class="dots"></span><span class="pp">1–9</span></li>
+          <li><span class="name">Optimism</span><span class="dots"></span><span class="pp">10–19</span></li>
+          <li><span class="name">Stuck: Between Hunger and Thirst</span><span class="dots"></span><span class="pp">20–29</span></li>
+          <li><span class="name">The Comparison Trap</span><span class="dots"></span><span class="pp">30–37</span></li>
+          <li><span class="name">To Belong and to Stand Out</span><span class="dots"></span><span class="pp">38–47</span></li>
+          <li><span class="name">Love: Partners, Friends, Closeness</span><span class="dots"></span><span class="pp">48–59</span></li>
+          <li><span class="name">Character Is a Habit</span><span class="dots"></span><span class="pp">60–66</span></li>
+          <li><span class="name">Meaning and Work</span><span class="dots"></span><span class="pp">67–69</span></li>
+          <li><span class="name">Your Nature: The Big Five</span><span class="dots"></span><span class="pp">70–77</span></li>
+          <li><span class="name">What Is in Your Control</span><span class="dots"></span><span class="pp">78–86</span></li>
+          <li><span class="name">Kindness Toward Yourself</span><span class="dots"></span><span class="pp">87–96</span></li>
+          <li><span class="name">Adversity, Loss and Grief</span><span class="dots"></span><span class="pp">97–100</span></li>
+          <li><span class="name">Time and Mortality</span><span class="dots"></span><span class="pp">101–105</span></li>
+          <li><span class="name">Anger and Inner Weather</span><span class="dots"></span><span class="pp">106–110</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="How to use the book">
+    <div class="daily">
+      <img class="photo" src="img/06_neutral_hands_h.jpg" data-v="img/06_neutral_hands_v.jpg" width="1800" height="1013" loading="lazy" alt="Hands in a cream wool sweater holding Pearls of Wisdom by a bright window.">
+      <blockquote>
+        <span class="label">From A Note on This Book</span>
+        <p>Keep this book somewhere you will see it, by the bed or next to the coffee maker. Read one page in the morning, and then try it out during the day: in a meeting, at the dinner table, stuck in traffic.</p>
+        <p class="last">Knowing the way is one thing, and walking it is another.</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <section id="scenes" aria-labelledby="scenes-h">
+    <div class="intro">
+      <span class="label">Scenes</span>
+      <h2 id="scenes-h">A page fits wherever you are.</h2>
+      <p class="desk-only">Most pages take two minutes to read. Select a photo to see it larger.</p>
+      <p class="swipe-hint">Most pages take two minutes to read. Swipe through the scenes →</p>
+    </div>
+    <div class="scenes">
+      <figure class="scene" data-n="02_chalet_coffee_table">
+        <button type="button" aria-label="Enlarge: the chalet"><img class="photo" src="img/02_chalet_coffee_table_h.jpg" data-v="img/02_chalet_coffee_table_v.jpg" width="1800" height="1013" loading="lazy" alt="The book on a rough timber coffee table in a mountain chalet, with tea, glasses, a wool blanket and a fire behind."></button>
+        <figcaption>The chalet <span>A slow weekend by the fire.</span></figcaption>
+      </figure>
+      <figure class="scene" data-n="03_teacher_desk">
+        <button type="button" aria-label="Enlarge: the teacher's desk"><img class="photo" src="img/03_teacher_desk_h.jpg" data-v="img/03_teacher_desk_v.jpg" width="1800" height="1013" loading="lazy" alt="The book on a teacher's desk beside a stack of graded papers and a red pen, the empty classroom behind."></button>
+        <figcaption>The teacher's desk <span>After the last bell.</span></figcaption>
+      </figure>
+      <figure class="scene" data-n="04_dentist_waiting_room">
+        <button type="button" aria-label="Enlarge: the waiting room"><img class="photo" src="img/04_dentist_waiting_room_h.jpg" data-v="img/04_dentist_waiting_room_v.jpg" width="1800" height="1013" loading="lazy" alt="The book on a side table in a dentist's waiting room, with magazines, a snake plant and tissues."></button>
+        <figcaption>The waiting room <span>Better than last year's magazines.</span></figcaption>
+      </figure>
+      <figure class="scene" data-n="05_japan_train_table">
+        <button type="button" aria-label="Enlarge: the train"><img class="photo" src="img/05_japan_train_table_h.jpg" data-v="img/05_japan_train_table_v.jpg" width="1800" height="1013" loading="lazy" alt="The book on a train tray table in Japan, beside green tea and a wooden lunch box, rice fields passing outside."></button>
+        <figcaption>The train <span>Green tea, rice fields, one page.</span></figcaption>
+      </figure>
+      <figure class="scene" data-n="07_neutral_linen_flatlay">
+        <button type="button" aria-label="Enlarge: the morning table"><img class="photo" src="img/07_neutral_linen_flatlay_h.jpg" data-v="img/07_neutral_linen_flatlay_v.jpg" width="1800" height="1013" loading="lazy" alt="Top-down view of the book on a linen cloth with black coffee, reading glasses and a sprig of eucalyptus."></button>
+        <figcaption>The morning table <span>Next to the coffee.</span></figcaption>
+      </figure>
+      <figure class="scene" data-n="08_neutral_oak_desk">
+        <button type="button" aria-label="Enlarge: the desk"><img class="photo" src="img/08_neutral_oak_desk_h.jpg" data-v="img/08_neutral_oak_desk_v.jpg" width="1800" height="1013" loading="lazy" alt="The book on a sunlit oak desk with a mug and a pencil, leaf shadows on the wall."></button>
+        <figcaption>The desk <span>Before the workday starts.</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="author" aria-labelledby="author-h">
+    <div class="author">
+      <span class="label">About the author</span>
+      <h2 id="author-h">Martin Guay, PhD</h2>
+      <p>Martin Guay, PhD, is a student of wisdom, and a teacher to whoever is curious and up for a good conversation. He follows his mind wherever it leads, always looking for the essence of what works, and why. For him, curiosity is where wisdom starts: the willingness to ask one more question, and to keep asking until the answer is simple enough to live by.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <span>Pearls of Wisdom · Published by Zen Creations™</span>
+      <span>Scene photos are generated illustrations.</span>
+    </div>
+  </footer>
+</div>
+
+<dialog class="lb" id="lb" aria-label="Photo">
+  <img id="lb-img" src="data:," alt="">
+  <div class="lb-bar">
+    <span id="lb-cap"></span>
+    <span class="ctl">
+      <button type="button" id="lb-prev" aria-label="Previous photo">←</button>
+      <button type="button" id="lb-next" aria-label="Next photo">→</button>
+      <button type="button" id="lb-close">Close</button>
+    </span>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const mobile = document.documentElement.dataset.device === 'mobile';
+
+  // Phones get the vertical photos (9:16); desktops keep the horizontal ones (16:9).
+  if (mobile) {
+    document.querySelectorAll('img.photo[data-v]').forEach((img) => {
+      img.src = img.dataset.v; img.width = 900; img.height = 1600;
+    });
+    document.querySelectorAll('.desk-only').forEach((el) => { el.hidden = true; });
+    document.querySelectorAll('.scene button').forEach((b) => { b.tabIndex = -1; });
+    return; // no lightbox on phones: the swipe row already shows the photos large
+  }
+
+  const lb = document.getElementById('lb');
+  if (!lb || typeof lb.showModal !== 'function') return;
+  const img = document.getElementById('lb-img'), cap = document.getElementById('lb-cap');
+  const scenes = [...document.querySelectorAll('.scene')];
+  let i = 0;
+  const show = (k) => {
+    i = (k + scenes.length) % scenes.length;
+    const s = scenes[i];
+    img.src = `img/${s.dataset.n}_h.jpg`;
+    img.alt = s.querySelector('img').alt;
+    cap.textContent = s.querySelector('figcaption').firstChild.textContent.trim();
+  };
+  scenes.forEach((s, k) => s.querySelector('button').addEventListener('click', () => { show(k); lb.showModal(); }));
+  document.getElementById('lb-prev').addEventListener('click', () => show(i - 1));
+  document.getElementById('lb-next').addEventListener('click', () => show(i + 1));
+  document.getElementById('lb-close').addEventListener('click', () => lb.close());
+  lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(i - 1);
+    if (e.key === 'ArrowRight') show(i + 1);
+  });
+})();
+</script>
 </body>
 </html>
