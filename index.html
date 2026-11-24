@@ -259,7 +259,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 
 <div class="wrap">
   <header class="top">
-    <span class="label">Zen Creation™</span>
+    <span class="label"><span data-book="publisher">Zen Creation™</span></span>
     <nav aria-label="Sections">
       <a href="#pages">Sample pages</a>
       <a href="#contents">Contents</a>
@@ -271,7 +271,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
   <main>
   <div class="hero">
     <div class="hero-text">
-      <span class="label">A book of daily reflections · 110 pages</span>
+      <span class="label">A book of daily reflections · <span data-book="page-count">108</span> pages</span>
       <h1>Pearls <em>of Wisdom</em></h1>
       <p class="subtitle">Daily Reflections on Old Wisdom and Modern Science</p>
       <p class="byline">Martin Guay, PhD</p>
@@ -314,8 +314,8 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 
     <div class="pages">
       <div class="sample">
-        <article class="page" aria-label="Page 3, Presence and Simple Joys">
-          <p class="label theme">Presence and Simple Joys</p>
+        <article class="page" data-entry="06-16" aria-label="Page 3, Joy">
+          <p class="label theme">Joy</p>
           <div class="ep">
             <p class="words">If there is a remedy, then what good is being unhappy? Just do it. And if there is none, then why bother?</p>
             <p class="by"><i>adapted from</i> SHANTIDEVA</p>
@@ -338,7 +338,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
       </div>
 
       <div class="sample">
-        <article class="page" aria-label="Page 11, Optimism">
+        <article class="page" data-entry="04-11" aria-label="Page 11, Optimism">
           <p class="label theme">Optimism</p>
           <div class="ep own">
             <p class="words">Optimism is learned the way handwriting is: slowly, and by practicing it.</p>
@@ -361,8 +361,8 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
       </div>
 
       <div class="sample">
-        <article class="page" aria-label="Page 24, Stuck: Between Hunger and Thirst">
-          <p class="label theme">Stuck: Between Hunger and Thirst</p>
+        <article class="page" data-entry="05-22" aria-label="Page 24, Stuck">
+          <p class="label theme">Stuck</p>
           <div class="ep">
             <p class="words">“Do you ask why such flight does not help you? It is because you flee along with yourself.”</p>
             <p class="by">SENECA</p>
@@ -390,25 +390,27 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
     <div class="contents">
       <div class="intro">
         <span class="label">Contents</span>
-        <h2 id="contents-h">Fourteen themes, from presence to character habits.</h2>
+        <h2 id="contents-h"><span data-book="theme-count">Fourteen</span> themes, from presence to character habits.</h2>
         <p>The pages are grouped by theme. Some will speak to you right away, and others will wait for the day you need them.</p>
       </div>
       <div>
         <ol class="toc">
-          <li><span class="name">Presence and Simple Joys</span><span class="dots"></span><span class="pp">1–9</span></li>
+          <!--book:toc-->
+          <li><span class="name">Joy</span><span class="dots"></span><span class="pp">1–9</span></li>
           <li><span class="name">Optimism</span><span class="dots"></span><span class="pp">10–19</span></li>
-          <li><span class="name">Stuck: Between Hunger and Thirst</span><span class="dots"></span><span class="pp">20–29</span></li>
+          <li><span class="name">Stuck</span><span class="dots"></span><span class="pp">20–29</span></li>
           <li><span class="name">The Comparison Trap</span><span class="dots"></span><span class="pp">30–37</span></li>
           <li><span class="name">To Belong and to Stand Out</span><span class="dots"></span><span class="pp">38–47</span></li>
           <li><span class="name">Love: Partners, Friends, Closeness</span><span class="dots"></span><span class="pp">48–59</span></li>
           <li><span class="name">Character Is a Habit</span><span class="dots"></span><span class="pp">60–66</span></li>
           <li><span class="name">Meaning and Work</span><span class="dots"></span><span class="pp">67–69</span></li>
-          <li><span class="name">Your Nature: The Big Five</span><span class="dots"></span><span class="pp">70–77</span></li>
-          <li><span class="name">What Is in Your Control</span><span class="dots"></span><span class="pp">78–86</span></li>
-          <li><span class="name">Kindness Toward Yourself</span><span class="dots"></span><span class="pp">87–96</span></li>
-          <li><span class="name">Adversity, Loss and Grief</span><span class="dots"></span><span class="pp">97–100</span></li>
-          <li><span class="name">Time and Mortality</span><span class="dots"></span><span class="pp">101–105</span></li>
-          <li><span class="name">Anger and Inner Weather</span><span class="dots"></span><span class="pp">106–110</span></li>
+          <li><span class="name">Your Nature: The Big Five</span><span class="dots"></span><span class="pp">70–76</span></li>
+          <li><span class="name">What Is in Your Control</span><span class="dots"></span><span class="pp">77–84</span></li>
+          <li><span class="name">Kindness towards Thyself</span><span class="dots"></span><span class="pp">85–94</span></li>
+          <li><span class="name">Adversity, Loss and Grief</span><span class="dots"></span><span class="pp">95–98</span></li>
+          <li><span class="name">Time and Mortality</span><span class="dots"></span><span class="pp">99–103</span></li>
+          <li><span class="name">Anger and Inner Weather</span><span class="dots"></span><span class="pp">104–108</span></li>
+          <!--/book:toc-->
         </ol>
       </div>
     </div>
@@ -470,7 +472,7 @@ footer { padding-block: 5rem max(3rem, calc(env(safe-area-inset-bottom, 0px) + 1
 
   <footer>
     <div class="foot">
-      <span>Pearls of Wisdom · Published by Zen Creation™</span>
+      <span>Pearls of Wisdom · Published by <span data-book="publisher">Zen Creation™</span></span>
       <span>Scene photos are generated illustrations.</span>
     </div>
   </footer>
