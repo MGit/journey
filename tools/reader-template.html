@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Reader's Copy · Pearls of Wisdom</title>
+<meta name="theme-color" content="#E9E1D1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1E1A16" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23E9E1D1'/%3E%3Cpath d='M3 22 C 10 24, 14 12, 21 15' fill='none' stroke='%23A0553A' stroke-width='1.6' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='14' r='3.4' fill='%23F7F3EA' stroke='%23A0553A' stroke-width='1.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* The reader's copy: one code opens the whole book. Pages turn sideways, one at a time; Contents jumps anywhere.
+   The pages arrive encrypted (built by tools/lock-book.mjs) and are unlocked in the browser. */
+:root {
+  --paper: #E9E1D1; --paper-2: #F3EEE4; --ink: #3A332C; --quiet: #7D7064; --clay: #A0553A; --on-clay: #FBF7F0;
+  --rule: #CFC4B1; --pearl: #F7F3EA; --shadow: 40 30 20;
+  --display: "Libre Baskerville", "Baskerville", Georgia, serif;
+  --body: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1E1A16; --paper-2: #29241F; --ink: #ECE4D6; --quiet: #ADA090; --clay: #D58463; --on-clay: #1E1A16;
+    --rule: #463D34; --pearl: #F2EDE3; --shadow: 0 0 0; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+a { color: inherit; }
+p { margin: 0; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+img { display: block; max-width: 100%; height: auto; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 2px; }
+.label { font-family: var(--display); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--quiet); }
+.path { display: block; width: 100%; height: auto; overflow: visible; }
+.path .line { fill: none; stroke: var(--clay); stroke-width: 1.4; stroke-linecap: round; }
+.path .pearl { fill: var(--pearl); stroke: var(--clay); stroke-width: 1.2; }
+button { font: inherit; color: inherit; }
+
+/* ---------- Lock screen ---------- */
+.lock {
+  min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+  padding: max(24px, env(safe-area-inset-top, 0px)) var(--gutter-r) max(24px, env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+}
+.lock-card { width: min(100%, 25rem); display: grid; gap: 1rem; text-align: center; }
+.lock h1 { font-size: clamp(2.3rem, 1.7rem + 3vw, 3.3rem); line-height: 1.04; letter-spacing: -.01em; }
+.lock h1 em { display: block; }
+.lock .sub { font-family: var(--display); font-style: italic; color: var(--quiet); }
+.lock .path { margin-block: .25rem; }
+.lock form { display: grid; gap: .7rem; margin-top: .5rem; text-align: left; }
+.lock label { font-family: var(--display); font-size: .9rem; }
+.lock input {
+  font: inherit; font-size: 1.1rem; width: 100%; padding: .8rem 1rem; color: var(--ink); background: var(--paper-2);
+  border: 1px solid var(--rule); border-radius: 10px;
+}
+.lock input:focus { outline: 2px solid var(--clay); outline-offset: 1px; border-color: transparent; }
+.open {
+  font-family: var(--display); font-size: 1rem; cursor: pointer;
+  padding: .85rem 1.3rem; border: 1px solid var(--clay); border-radius: 999px; background: var(--clay); color: var(--on-clay);
+  transition: background .2s, border-color .2s;
+}
+.open:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.open:disabled { cursor: progress; opacity: .75; }
+.msg { min-height: 1.5em; font-size: .93rem; color: var(--clay); text-align: center; }
+.back { font-size: .9rem; color: var(--quiet); text-decoration: none; }
+.back:hover { color: var(--clay); }
+
+/* ---------- Reader: a full-screen book. Bar, pages, controls. ---------- */
+.reader { height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+.bar {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem;
+  padding: max(.7rem, env(safe-area-inset-top, 0px)) var(--gutter-r) .6rem var(--gutter-l);
+}
+.bar .title { font-family: var(--display); font-size: .92rem; text-decoration: none; white-space: nowrap; }
+.bar .title:hover { color: var(--clay); }
+.bar .end { justify-self: end; }
+.linkbtn {
+  display: inline-flex; align-items: center; gap: .45rem; font-size: .92rem; color: var(--quiet);
+  background: none; border: 0; padding: .4rem 0; min-height: 40px; cursor: pointer;
+}
+.linkbtn:hover { color: var(--clay); }
+.linkbtn.strong { color: var(--ink); font-family: var(--display); }
+.linkbtn.strong:hover { color: var(--clay); }
+.linkbtn svg { width: 1.05rem; height: 1.05rem; flex: none; }
+@media (max-width: 520px) { .bar .title { display: none; } .bar { grid-template-columns: 1fr 1fr; } }
+
+/* Pages sit side by side; the row snaps one page at a time. Each page scrolls on its own if it runs long. */
+.track {
+  display: flex; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain; scrollbar-width: none; outline: none;
+}
+.track::-webkit-scrollbar { display: none; }
+.leaf {
+  flex: 0 0 100%; min-width: 0; height: 100%; display: flex; overflow-y: auto; overscroll-behavior-y: contain;
+  scroll-snap-align: center; scroll-snap-stop: always; container-type: size;
+  padding: .6rem var(--gutter-r) 1.2rem var(--gutter-l);
+}
+
+/* A page at Digest 5.5 × 8.5, sized to fit the screen where it can */
+.page {
+  margin: auto; flex: none;
+  width: min(100%, 33rem);
+  width: min(100%, max(19rem, min(33rem, calc((100cqh - 1.8rem) * 5.5 / 8.5))));
+  aspect-ratio: 5.5 / 8.5; /* a minimum: a page with more text grows taller */
+  background: var(--paper-2); color: var(--ink);
+  padding: 2.3rem 2rem 1.4rem; display: flex; flex-direction: column; gap: .8rem;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / .12), 0 14px 30px -16px rgb(var(--shadow) / .45);
+  font-size: 1rem; line-height: 1.58;
+}
+@media (max-width: 480px) { .page { padding: 1.8rem 1.35rem 1.2rem; font-size: .98rem; } }
+.page .theme { text-align: center; margin-bottom: .3rem; }
+.ep { text-align: center; display: grid; gap: .35rem; padding-inline: .4rem; margin-bottom: .6rem; }
+.ep .words { font-size: 1.06rem; line-height: 1.45; }
+.ep.own .words { font-style: italic; }
+.ep .by { font-family: var(--display); font-size: .78rem; letter-spacing: .08em; }
+.ep .by .name { text-transform: uppercase; }
+.ep .by i { font-family: var(--body); letter-spacing: 0; font-size: .95rem; }
+.ep .src { font-size: .8rem; font-style: italic; color: var(--quiet); line-height: 1.35; }
+.page .body { display: grid; gap: .55rem; }
+.page .body p { text-indent: 1.2em; hyphens: auto; }
+.page .body p:first-child, .page .body blockquote + p { text-indent: 0; }
+.page blockquote { margin: .2rem 0 .5rem 1.2rem; font-style: italic; }
+.page blockquote p { text-indent: 0 !important; }
+.page sup { font-size: .68em; line-height: 0; margin-left: .08em; }
+.page sup a { color: var(--clay); text-decoration: none; padding: 0 .1em; }
+.page sup a:hover, .page sup a:focus-visible { text-decoration: underline; }
+.refs { margin-top: auto; padding-top: .7rem; border-top: 1px solid var(--rule); font-size: .76rem; line-height: 1.45; color: var(--quiet); }
+.refs .label { font-size: .64rem; margin-bottom: .3rem; }
+.refs ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; }
+.refs li { transition: color .3s; }
+.refs li.hit { color: var(--ink); }
+.refs .mark { color: var(--clay); margin-right: .45em; text-decoration: none; font-variant-numeric: tabular-nums; }
+.refs span.mark { font-style: italic; }
+.page .folio { margin-top: auto; padding-top: .8rem; text-align: center; font-size: .82rem; color: var(--quiet); font-variant-numeric: tabular-nums; }
+.refs + .folio { margin-top: 0; }
+
+/* Cover, title page, section openers, front and back matter */
+.page.cover-leaf { padding: 0; background: none; overflow: hidden; border-radius: 2px 4px 4px 2px; }
+.page.cover-leaf img { width: 100%; height: 100%; object-fit: cover; }
+.page.title-leaf { justify-content: space-between; text-align: center; padding-block: 3.5rem 2rem; }
+.title-block { display: grid; gap: .8rem; }
+.book-title { font-size: clamp(2rem, 1.5rem + 2vw, 2.6rem); line-height: 1.1; }
+.book-sub { font-family: var(--display); font-style: italic; color: var(--quiet); }
+.book-by { font-family: var(--display); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; margin-top: .6rem; }
+.title-leaf .path { width: 70%; margin: 0 auto; }
+.copyright { display: grid; gap: .45rem; font-size: .74rem; line-height: 1.45; color: var(--quiet); text-align: left; }
+.copyright .label { text-align: center; margin-bottom: .4rem; }
+.page.opener { justify-content: center; align-items: center; text-align: center; gap: 1rem; }
+.opener h2 { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.3rem); line-height: 1.2; max-width: 16ch; }
+.opener .range { font-style: italic; color: var(--quiet); }
+.opener .path { width: 60%; margin-top: 1rem; }
+.matter-title { text-align: center; font-size: 1.35rem; line-height: 1.3; margin: .6rem 0 1rem; }
+.page.bare { justify-content: center; }
+.page.bare .body { gap: 1.1rem; text-align: center; font-style: italic; }
+.page.bare .body p { text-indent: 0; }
+.page.appendix .body p { text-indent: 0; }
+.page.appendix .body p strong { color: var(--clay); font-weight: 400; font-family: var(--display); margin-right: .2em; }
+
+/* Page-turn controls */
+.controls { position: relative; padding: .7rem var(--gutter-r) max(.9rem, env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
+.progress { position: absolute; top: 0; left: var(--gutter-l); right: var(--gutter-r); height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: var(--clay); transition: width .25s ease; }
+.controls-row { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+.turn {
+  font-family: var(--display); font-size: .95rem; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--ink); border-radius: 999px; padding: .55rem 1.1rem; min-height: 44px; min-width: 44px; cursor: pointer;
+  transition: background .2s, color .2s, opacity .2s;
+}
+.turn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.turn:disabled { opacity: .3; cursor: default; }
+.count { width: 13rem; max-width: 42vw; text-align: center; color: var(--quiet); font-size: .93rem; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 480px) { .turn .word { display: none; } .turn { padding-inline: .9rem; } .count { max-width: none; flex: 1; } }
+
+/* ---------- Contents ---------- */
+dialog.outline {
+  margin: 0; padding: 0; border: 0; height: 100%; max-height: none; width: min(100%, 26rem); max-width: none;
+  background: var(--paper); color: var(--ink); box-shadow: 8px 0 40px -12px rgb(var(--shadow) / .5);
+}
+dialog.outline::backdrop { background: rgb(20 16 12 / .45); }
+@media (prefers-reduced-motion: no-preference) {
+  dialog.outline[open] { animation: slide-in .22s ease-out; }
+  @keyframes slide-in { from { transform: translateX(-24px); opacity: 0; } }
+}
+.outline-inner { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.outline-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--rule);
+  padding: max(.9rem, env(safe-area-inset-top, 0px)) 1.25rem .8rem max(1.25rem, env(safe-area-inset-left, 0px));
+}
+.outline-head h2 { font-size: 1.15rem; }
+.toc {
+  list-style: none; margin: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: .15rem;
+  padding: .8rem 1.25rem max(2rem, env(safe-area-inset-bottom, 0px)) max(1.25rem, env(safe-area-inset-left, 0px));
+}
+.toc li { min-width: 0; }
+.toc .item {
+  width: 100%; display: flex; align-items: baseline; gap: .5rem; text-align: left; cursor: pointer;
+  background: none; border: 0; padding: .45rem .5rem; margin-inline: -.5rem; width: calc(100% + 1rem); border-radius: 6px;
+}
+.toc .item:hover { background: var(--paper-2); }
+.toc .item[aria-current] { color: var(--clay); }
+.toc .name { min-width: 0; }
+.toc .dots { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-.3em); min-width: 1rem; }
+.toc .pp { color: var(--quiet); font-size: .88rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.toc .section { padding-top: .6rem; }
+.toc .section .item { font-family: var(--display); font-size: .98rem; }
+.toc .group-label { padding: 1.1rem 0 .2rem; }
+/* Each page under its section: number, the opening of its epigraph, who said it */
+.toc .pages { list-style: none; margin: 0 0 .5rem; padding: 0; display: grid; }
+.pg {
+  display: grid; grid-template-columns: 2.1rem minmax(0, 1fr); gap: .5rem; align-items: baseline; text-align: left; cursor: pointer;
+  background: none; border: 0; border-radius: 6px; padding: .4rem .5rem; margin-inline: -.5rem; width: calc(100% + 1rem);
+}
+.pg:hover { background: var(--paper-2); }
+.pg-no { color: var(--quiet); font-size: .82rem; font-variant-numeric: tabular-nums; text-align: right; }
+.pg-text { min-width: 0; display: grid; gap: .05rem; }
+.pg-words {
+  font-size: .9rem; line-height: 1.4; overflow: hidden;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
+}
+.pg-by { font-family: var(--display); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--quiet); }
+.pg[aria-current] { background: var(--paper-2); box-shadow: inset 2px 0 0 var(--clay); }
+.pg[aria-current] .pg-no, .pg[aria-current] .pg-words { color: var(--clay); }
+</style>
+</head>
+<body>
+
+<main class="lock" id="lock">
+  <div class="lock-card">
+    <span class="label">Zen Creation™ · Reader's copy</span>
+    <h1>Pearls <em>of Wisdom</em></h1>
+    <p class="sub">Enter the code you were given to open the book.</p>
+    <svg class="path" viewBox="0 0 400 40" aria-hidden="true" focusable="false">
+      <path class="line" d="M-4 28 C 60 31, 100 10, 170 16 S 280 34, 340 25 S 368 20, 378 22" />
+      <circle class="pearl" cx="386" cy="22" r="6" />
+    </svg>
+    <form id="form" autocomplete="on">
+      <label for="code">Your code</label>
+      <input id="code" name="password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" required>
+      <button class="open" id="go" type="submit">Open the book</button>
+      <p class="msg" id="msg" role="alert"></p>
+    </form>
+    <a class="back" href="../index.html">← Back to zencreation.org</a>
+  </div>
+</main>
+
+<div class="reader" id="reader" hidden>
+  <header class="bar">
+    <button class="linkbtn strong" id="toc-open" type="button" aria-haspopup="dialog" aria-controls="outline">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Contents
+    </button>
+    <a class="title" href="../index.html">Pearls of Wisdom</a>
+    <button class="linkbtn end" id="relock" type="button">Lock the book</button>
+  </header>
+  <div class="track" id="track" tabindex="-1" aria-label="Book pages" aria-roledescription="book"></div>
+  <nav class="controls" aria-label="Turn the page">
+    <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+    <div class="controls-row">
+      <button class="turn" id="prev" type="button" aria-label="Previous page">←<span class="word"> Previous</span></button>
+      <span class="count" id="count" aria-live="polite"></span>
+      <button class="turn" id="next" type="button" aria-label="Next page"><span class="word">Next </span>→</button>
+    </div>
+  </nav>
+</div>
+
+<dialog class="outline" id="outline" aria-labelledby="outline-h">
+  <div class="outline-inner">
+    <div class="outline-head">
+      <h2 id="outline-h">Contents</h2>
+      <button class="linkbtn" id="toc-close" type="button">Close</button>
+    </div>
+    <ol class="toc" id="toc"></ol>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const BOOK = "__BOOK__"; // replaced with the encrypted pages by tools/lock-book.mjs
+  const SAVE = 'pow-reader';
+  const $ = (id) => document.getElementById(id);
+  const lock = $('lock'), reader = $('reader'), form = $('form'), input = $('code'), go = $('go'), msg = $('msg');
+  const track = $('track'), prev = $('prev'), next = $('next'), count = $('count'), progress = $('progress');
+  const outline = $('outline'), toc = $('toc');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const store = {
+    get: (k) => { try { return sessionStorage.getItem(k); } catch { return null; } },
+    set: (k, v) => { try { sessionStorage.setItem(k, v); } catch {} },
+    del: (k) => { try { sessionStorage.removeItem(k); } catch {} },
+  };
+
+  // Must match normalize() in tools/lock-book.mjs: capitals and surrounding spaces don't matter.
+  const normalize = (code) => code.normalize('NFC').trim().toLowerCase();
+  const bytes = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+  async function unlock(code) {
+    const enc = new TextEncoder();
+    const base = await crypto.subtle.importKey('raw', enc.encode(normalize(code)), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: bytes(BOOK.salt), iterations: BOOK.iter, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt'],
+    );
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes(BOOK.iv) }, key, bytes(BOOK.data));
+    return new TextDecoder().decode(plain);
+  }
+
+  let leaves = [], at = -1, raf = 0, total = 0;
+  const pageOf = (leaf) => leaf.firstElementChild.dataset;
+  const behavior = (smooth) => (smooth && !reduce ? 'smooth' : 'auto');
+
+  function turnTo(i, smooth = true) {
+    i = Math.max(0, Math.min(leaves.length - 1, i));
+    if (Math.abs(i - at) > 1) smooth = false; // a jump, not a page turn
+    leaves[i].scrollTop = 0;
+    track.scrollTo({ left: i * track.clientWidth, behavior: behavior(smooth) });
+  }
+
+  function update() {
+    if (!leaves.length) return;
+    const i = Math.max(0, Math.min(leaves.length - 1, Math.round(track.scrollLeft / Math.max(1, track.clientWidth))));
+    if (i === at) return;
+    if (at >= 0 && leaves[at]) leaves[at].setAttribute('aria-hidden', 'true');
+    at = i;
+    leaves[at].removeAttribute('aria-hidden');
+    const d = pageOf(leaves[at]);
+    count.textContent = d.kind === 'page' ? `Page ${d.no} of ${total}` : d.title;
+    progress.style.width = `${leaves.length > 1 ? (at / (leaves.length - 1)) * 100 : 100}%`;
+    prev.disabled = at === 0;
+    next.disabled = at === leaves.length - 1;
+    store.set(SAVE + ':page', String(at));
+  }
+
+  // Contents: front matter, each section with its page numbers, back matter.
+  function buildToc() {
+    const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+    const item = (i, name, pp) => {
+      const b = el('button', 'item'); b.type = 'button'; b.dataset.i = i;
+      b.append(el('span', 'name', name));
+      if (pp) b.append(el('span', 'dots'), el('span', 'pp', pp));
+      return b;
+    };
+    toc.replaceChildren();
+    let list = null;
+    const section = (i, name, range) => {
+      const li = el('li', 'section'); li.append(item(i, name, range));
+      list = el('ol', 'pages'); li.append(list); toc.append(li);
+    };
+    leaves.forEach((leaf, i) => {
+      const d = pageOf(leaf);
+      if (d.kind === 'page') {
+        if (!list) section(i, 'The Pages'); // pages with no section opener (a mixed layout): one run of pages
+        const b = el('button', 'pg'); b.type = 'button'; b.dataset.i = i;
+        const text = el('span', 'pg-text'); text.append(el('span', 'pg-words', d.hint));
+        if (d.by) text.append(el('span', 'pg-by', d.by));
+        b.append(el('span', 'pg-no', d.no), text);
+        const li = el('li'); li.append(b); list.append(li);
+      } else if (d.kind === 'section') {
+        section(i, d.title, d.range);
+      } else {
+        if (list) { list = null; toc.append(el('li', 'group-label label', 'After the pages')); }
+        const li = el('li'); li.append(item(i, d.title)); toc.append(li);
+      }
+    });
+  }
+
+  function openToc() {
+    toc.querySelectorAll('[aria-current]').forEach((n) => n.removeAttribute('aria-current'));
+    const here = toc.querySelector(`[data-i="${at}"]`);
+    if (here) here.setAttribute('aria-current', 'page');
+    outline.showModal();
+    (here || toc.querySelector('[data-i]'))?.scrollIntoView({ block: 'center' });
+    (here || toc.querySelector('[data-i]'))?.focus({ preventScroll: true });
+  }
+
+  function openBook(html) {
+    const holder = document.createElement('div');
+    holder.innerHTML = html;
+    leaves = [...holder.querySelectorAll(':scope > article.page')].map((page) => {
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      leaf.setAttribute('aria-hidden', 'true');
+      leaf.append(page);
+      return leaf;
+    });
+    total = leaves.filter((l) => pageOf(l).kind === 'page').length;
+    track.replaceChildren(...leaves);
+    buildToc();
+    lock.hidden = true;
+    reader.hidden = false;
+    at = -1;
+    requestAnimationFrame(() => {
+      turnTo(Number(store.get(SAVE + ':page')) || 0, false);
+      update();
+      track.focus({ preventScroll: true });
+    });
+  }
+
+  function closeBook() {
+    store.del(SAVE);
+    if (outline.open) outline.close();
+    track.replaceChildren();
+    toc.replaceChildren();
+    leaves = [];
+    at = -1;
+    reader.hidden = true;
+    lock.hidden = false;
+    msg.textContent = '';
+    input.value = '';
+    input.focus();
+  }
+
+  function busy(on) {
+    go.disabled = on;
+    go.textContent = on ? 'Opening…' : 'Open the book';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (typeof BOOK === 'string') { msg.textContent = 'No pages are locked into this copy yet.'; return; }
+    const code = input.value;
+    if (!normalize(code)) { msg.textContent = 'Enter your code to open the book.'; return; }
+    busy(true);
+    msg.textContent = '';
+    try {
+      const html = await unlock(code);
+      store.set(SAVE, code);
+      input.value = '';
+      openBook(html);
+    } catch (err) {
+      msg.textContent = err && err.name === 'OperationError'
+        ? "That code didn't open the book. Check it and try again."
+        : "This browser can't open the book. Try a recent Safari, Chrome, Edge or Firefox.";
+      input.select();
+    } finally {
+      busy(false);
+    }
+  });
+
+  $('relock').addEventListener('click', closeBook);
+  $('toc-open').addEventListener('click', openToc);
+  $('toc-close').addEventListener('click', () => outline.close());
+  outline.addEventListener('click', (e) => {
+    if (e.target === outline) { outline.close(); return; }
+    const b = e.target.closest('[data-i]');
+    if (!b) return;
+    outline.close();
+    turnTo(Number(b.dataset.i), false);
+    track.focus({ preventScroll: true });
+  });
+  prev.addEventListener('click', () => turnTo(at - 1));
+  next.addEventListener('click', () => turnTo(at + 1));
+  track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+  window.addEventListener('resize', () => { if (leaves.length) { const i = at; at = -1; turnTo(i, false); update(); } });
+
+  // Source numbers jump to the source at the foot of the same page, and back.
+  track.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ block: 'center', inline: 'nearest', behavior: behavior(true) });
+    if (target.matches('li')) { target.classList.add('hit'); setTimeout(() => target.classList.remove('hit'), 1800); }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (reader.hidden || outline.open || e.altKey || e.metaKey || e.ctrlKey || e.target.closest('input, textarea')) return;
+    const to = { ArrowRight: at + 1, PageDown: at + 1, ArrowLeft: at - 1, PageUp: at - 1, Home: 0, End: leaves.length - 1 }[e.key];
+    if (to === undefined) return;
+    e.preventDefault();
+    turnTo(to);
+  });
+
+  // Same tab, already unlocked: open straight to the last page read.
+  const saved = store.get(SAVE);
+  if (saved && typeof BOOK !== 'string') {
+    busy(true);
+    unlock(saved).then(openBook, () => store.del(SAVE)).finally(() => busy(false));
+  } else {
+    input.focus();
+  }
+})();
+</script>
+</body>
+</html>
